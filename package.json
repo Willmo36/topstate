@@ -1,0 +1,16 @@
+{
+  "name": "topstate",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^17.0.1",
+    "typescript": "^4.0.5"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.15",
+    "jest": "^26.6.1",
+    "ts-jest": "^26.4.3",
+    "ts-node": "^9.0.0"
+  }
+}

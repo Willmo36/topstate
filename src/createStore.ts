@@ -1,11 +1,11 @@
 export type Reducer<S, A extends Action> = (state: S, action: A) => S;
 export type GetState<S> = () => S;
 export type Subscriber<S> = (s: S) => void;
-export type Dispatcher<A extends Action> = (action: A) => void;
+export type Dispatcher<S, A extends Action> = (action: A | ActionThunk<S, A>) => void;
 export type Action = { type: string };
 export type ActionThunk<S, A extends Action> = (
   getState: GetState<S>,
-  dispatcher: Dispatcher<A>
+  dispatcher: Dispatcher<S, A>
 ) => void;
 
 export type Logger<S, A extends Action> = {
@@ -35,7 +35,7 @@ export function createStore<S, A extends Action>(
 
   const getState: GetState<S> = () => state;
 
-  const dispatch: Dispatcher<A> = (action) => {
+  const dispatch: Dispatcher<S, A> = (action) => {
     if (isThunk_(action)) {
       action(getState, dispatch);
     } else {

@@ -23,8 +23,8 @@ export const makeDefaultLogger = <S, A extends Action>(): Logger<S, A> => ({
 });
 
 export function createStore<S, A extends Action>(
-  reducer: Reducer<S, A>,
   initialState: S,
+  reducer: Reducer<S, A>,
   logger = makeDefaultLogger<S, A>()
 ) {
   let state = initialState;
@@ -63,6 +63,6 @@ export function createStore<S, A extends Action>(
 }
 
 // type Max = {type: "s", payload: "foo"} | {type: "f", payload: number};
-// const store = createStore<number, Max>((s, a) =>s + 1, 1);
+// const store = createStore<number, Max>(1, (s, a) =>s + 1);
 // store.dispatch({type: "s", payload: "foo"});
 // console.log(store.getState)

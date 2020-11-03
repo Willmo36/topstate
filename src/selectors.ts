@@ -26,3 +26,25 @@ export const ap3 = <S, A, B, C, D>(
     let c = ap(bSelector, b);
     return ap(cSelector, c);
 }
+
+//extract the result type of the selector
+type SelectorResult<SL> = SL extends Selector<any, infer A> ? A : never;
+
+//"map" a collection of selectors to a collection of their results
+type SelectorResults<S> = {
+    [K in keyof S]: SelectorResult<S[K]>
+}
+
+export const createCompoundSelector = <S, A>(
+ selectors: [...Selector<S, any>[]],
+ fn: (...ss: SelectorResults<typeof selectors>) => A
+): Selector<S, A> => state => {
+    const selections = selectors.map(sl => sl(state));
+
+    //@ts-ignore
+    return fn(...selections)
+}
+
+// declare const s1: Selector<"foo", "bar">;
+// declare const s2: Selector<"foo", number>;
+// const foo = createCompoundSelector([s1, s2], (r1, r2) => 1)

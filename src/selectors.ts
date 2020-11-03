@@ -40,8 +40,6 @@ export const createCompoundSelector = <S, A>(
  fn: (...ss: SelectorResults<typeof selectors>) => A
 ): Selector<S, A> => state => {
     const selections = selectors.map(sl => sl(state));
-
-    //@ts-ignore
     return fn(...selections)
 }
 

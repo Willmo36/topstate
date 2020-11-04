@@ -1,7 +1,10 @@
 export type Selector<S, A> = (s: S) => A;
 
 //extract the result type of the selector
-export type SelectorResult<SL> = SL extends ((...args: any) => infer A) ? A :never;
+export type SelectorResult<SL> = SL extends (...args: any) => infer A
+  ? A
+  : never;
+export type SelectorSource<SL> = SL extends Selector<infer S, any> ? S : never;
 
 //"map" a collection of selectors to a collection of their results
 export type SelectorResults<S> = {
@@ -34,14 +37,21 @@ export const createSelector = <S, A>(
 ): Selector<S, A> => memoize(fn);
 
 type Map<S, SL> = {
-  [K in keyof SL]: Selector<S, SL[K]>
-}
+  [K in keyof SL]: Selector<S, SL[K]>;
+};
 
-export const createCompoundSelector = <S, A, SL extends [any, ...any[]]>(
-  fn: (...ss: SL) => A,
-  ...selectors: Map<S, SL> 
-): Selector<S, A> => ((state) => {
+export const createCompoundSelector = <
+  S,
+  A,
+  SL extends [Selector<S, any>, ...Selector<S, any>[]]
+>(
+  selectors: SL,
+  fn: (...selectorResults: SelectorResults<SL>) => A
+
+  //Selector<S, A> resolves S to unknown
+  //Don't understand why, perhaps a variance result
+): Selector<SelectorSource<SL[0]>, A> => (state) => {
   const selections = selectors.map((sl) => sl(state));
   //@ts-ignore
   return fn(...selections);
-});
+};

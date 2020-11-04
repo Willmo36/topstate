@@ -6,11 +6,15 @@ export interface Selector<S, A> {
 export type SelectorResult<SL> = SL extends (...args: any) => infer A
   ? A
   : never;
-export type SelectorSource<SL> = SL extends Selector<infer S, any> ? S : never;
 
 //"map" a collection of selectors to a collection of their results
 export type SelectorResults<S> = {
   [K in keyof S]: SelectorResult<S[K]>;
+};
+
+//Lifts mappable types into Selectors from S
+export type LiftToSelector<S, AS> = {
+  [K in keyof AS]: Selector<S, AS[K]>;
 };
 
 const arrayShallowEquality = <T>(a1: T[], a2: T[]): boolean =>
@@ -38,22 +42,16 @@ export const createSelector = <S, A>(
   memoize = memoizeLastResult
 ): Selector<S, A> => memoize(fn);
 
-type Map<S, SL> = {
-  [K in keyof SL]: Selector<S, SL[K]>;
-};
+//Todo - add type level tests to ensure createCompoundSelector infers correctly
 
 export const createCompoundSelector = <
   S,
   B,
-  A1, 
+  A1, //LiftToSelector appears to prevent inference from picking up S. So we make the first dependent selector mandatory
   AN extends any[]
 >(
-  selectors: [Selector<S, A1>, ...Map<S,AN>],
+  selectors: [Selector<S, A1>, ...LiftToSelector<S,AN>],
   fn: (...selectorResults: SelectorResults<typeof selectors>) => B
-
-  //Selector<S, A> resolves S to unknown
-  //Don't understand why, perhaps a variance result
-// ): Selector<SelectorSource<typeof selectors[0]>, B> => (state) => {
 ): Selector<S, B> => (state) => {
   const selections = selectors.map((sl) => sl(state));
   //@ts-ignore

@@ -32,14 +32,10 @@ describe("selectors", () => {
       const state: TestState = { foo: 100 };
       const selector_a = createSelector<TestState, number>((s) => s.foo);
       const selector_b = createSelector<TestState, number>((s) => s.foo * 2);
-      const selector_c = createSelector<TestState, string>(s => "string");
 
       const selector_ab = createCompoundSelector(
-        //this should not work
-        //need to do some type level testig
-        // [selector_a, selector_b, selector_c, (foo: number) => "hello"],
-        [selector_a, selector_b, selector_c],
-        (a,b,c) => a + b + c.length,
+        [selector_a, selector_b],
+        (a,b) => a + b,
       );
 
       const result = selector_ab(state);

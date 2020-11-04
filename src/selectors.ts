@@ -1,4 +1,6 @@
-export type Selector<S, A> = (s: S) => A;
+export interface Selector<S, A> {
+  (s: S) : A
+};
 
 //extract the result type of the selector
 export type SelectorResult<SL> = SL extends (...args: any) => infer A
@@ -42,15 +44,17 @@ type Map<S, SL> = {
 
 export const createCompoundSelector = <
   S,
-  A,
-  SL extends [Selector<S, any>, ...Selector<S, any>[]]
+  B,
+  A1, 
+  AN extends any[]
 >(
-  selectors: SL,
-  fn: (...selectorResults: SelectorResults<SL>) => A
+  selectors: [Selector<S, A1>, ...Map<S,AN>],
+  fn: (...selectorResults: SelectorResults<typeof selectors>) => B
 
   //Selector<S, A> resolves S to unknown
   //Don't understand why, perhaps a variance result
-): Selector<SelectorSource<SL[0]>, A> => (state) => {
+// ): Selector<SelectorSource<typeof selectors[0]>, B> => (state) => {
+): Selector<S, B> => (state) => {
   const selections = selectors.map((sl) => sl(state));
   //@ts-ignore
   return fn(...selections);

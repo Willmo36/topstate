@@ -35,9 +35,10 @@ describe("selectors", () => {
       const selector_c = createSelector<TestState, string>(s => "string");
 
       const selector_ab = createCompoundSelector(
-        //eggs should not be working
-        [selector_a, selector_b, selector_c, (eggs: number) => eggs],
-        // [selector_a, selector_b, selector_c],
+        //this should not work
+        //need to do some type level testig
+        // [selector_a, selector_b, selector_c, (foo: number) => "hello"],
+        [selector_a, selector_b, selector_c],
         (a,b,c) => a + b + c.length,
       );
 

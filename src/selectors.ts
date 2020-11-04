@@ -1,7 +1,7 @@
 export type Selector<S, A> = (s: S) => A;
 
 //extract the result type of the selector
-export type SelectorResult<SL> = SL extends Selector<any, infer A> ? A : never;
+export type SelectorResult<SL> = SL extends ((...args: any) => infer A) ? A :never;
 
 //"map" a collection of selectors to a collection of their results
 export type SelectorResults<S> = {
@@ -18,7 +18,7 @@ export const memoizeLastResult = <Args extends any[], R>(
   let lastResult: R = null;
 
   const fn2 = (...args: Args): R => {
-    if (!arrayShallowEquality(args, lastArgs)) {
+    if (!arrayShallowEquality(args, lastArgs || [])) {
       lastResult = fn(...args);
       lastArgs = args;
     }
@@ -33,11 +33,15 @@ export const createSelector = <S, A>(
   memoize = memoizeLastResult
 ): Selector<S, A> => memoize(fn);
 
-export const createCompoundSelector = <S, A>(
-  selectors: [...Selector<S, any>[]],
-  fn: (...ss: SelectorResults<typeof selectors>) => A,
-  memoize = memoizeLastResult
-): Selector<S, A> => memoize((state) => {
+type Map<S, SL> = {
+  [K in keyof SL]: Selector<S, SL[K]>
+}
+
+export const createCompoundSelector = <S, A, SL extends [any, ...any[]]>(
+  fn: (...ss: SL) => A,
+  ...selectors: Map<S, SL> 
+): Selector<S, A> => ((state) => {
   const selections = selectors.map((sl) => sl(state));
+  //@ts-ignore
   return fn(...selections);
 });

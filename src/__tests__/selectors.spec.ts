@@ -43,6 +43,22 @@ describe("selectors", () => {
       expect(result).toEqual(state.foo * 3);
     });
 
-    it("should memoize the selector", () => {});
+    it("should memoize the selector", () => {
+      const state: TestState = { foo: 100 };
+
+      //ensure the args to selector_ab are ref eq
+      const selector_a = createSelector<TestState, {}>((s) => s);
+      const selector_b = createSelector<TestState, {}>((s) => s);
+
+      const selector_ab = createCompoundSelector(
+        [selector_a, selector_b],
+        (a,b) => ({}),
+      );
+
+      const result1 = selector_ab(state);
+      const result2 = selector_ab(state);
+
+      expect(result1).toBe(result2);
+    });
   });
 });

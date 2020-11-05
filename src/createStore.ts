@@ -1,19 +1,13 @@
-export type Reducer<S, A extends Action> = (state: S, action: A) => S;
-export type GetState<S> = () => S;
-export type Subscriber<S> = (s: S) => void;
-export type Dispatcher<S, A extends Action> = (action: A | ActionThunk<S, A>) => void;
-export type Action = { type: string };
-export type ActionThunk<S, A extends Action> = (
-  getState: GetState<S>,
-  dispatcher: Dispatcher<S, A>
-) => void;
-
-export type Logger<S, A extends Action> = {
-  logStart: (action: A) => void;
-  logAction: (action: A) => void;
-  logState: (state: S, stage: "prev" | "next") => void;
-  logEnd: () => void;
-};
+import {
+  Action,
+  Logger,
+  Subscriber,
+  ActionThunk,
+  GetState,
+  Dispatcher,
+  Reducer,
+  Store
+} from "./types";
 
 export const makeDefaultLogger = <S, A extends Action>(): Logger<S, A> => ({
   logStart: (action) => console.group(`action ${action.type}`),
@@ -22,11 +16,14 @@ export const makeDefaultLogger = <S, A extends Action>(): Logger<S, A> => ({
   logEnd: () => console.groupEnd(),
 });
 
+
 export function createStore<S, A extends Action>(
   initialState: S,
   reducer: Reducer<S, A>,
+
+  //todo replace this with redux dev tools
   logger = makeDefaultLogger<S, A>()
-) {
+): Store<S, A> {
   let state = initialState;
   let subscribers: Subscriber<S>[] = [];
 
@@ -62,7 +59,14 @@ export function createStore<S, A extends Action>(
   };
 }
 
-// type Max = {type: "s", payload: "foo"} | {type: "f", payload: number};
-// const store = createStore<number, Max>(1, (s, a) =>s + 1);
-// store.dispatch({type: "s", payload: "foo"});
-// console.log(store.getState)
+
+const noop = () => ({})
+/**
+ * Noop all logger operations. Useful for testing.
+ */
+export const createNoopLogger = <S, A extends Action>(): Logger<S, A> => ({
+    logAction:noop,
+    logEnd: noop,
+    logStart:noop,
+    logState: noop
+})

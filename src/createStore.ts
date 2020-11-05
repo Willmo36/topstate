@@ -58,3 +58,15 @@ export function createStore<S, A extends Action>(
     subscribe,
   };
 }
+
+
+const noop = () => ({})
+/**
+ * Noop all logger operations. Useful for testing.
+ */
+export const createNoopLogger = <S, A extends Action>(): Logger<S, A> => ({
+    logAction:noop,
+    logEnd: noop,
+    logStart:noop,
+    logState: noop
+})

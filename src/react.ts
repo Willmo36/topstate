@@ -3,12 +3,11 @@ import { Selector } from "./selectors";
 import { Action, Store } from "./types";
 
 export function createStoreReactFns<S, A extends Action>() {
-  const StoreContext = React.createContext<Store<S, A>>(null);
+  const StoreContext = React.createContext<Store<S, A> | null>(null);
 
   const useStore = () => {
     const store = React.useContext(StoreContext);
-    assertStoreContextValue(store);
-    return store;
+    return assertStoreContextValue(store);
   };
 
   const useDispatch = () => useStore().dispatch;

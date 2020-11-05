@@ -1,11 +1,11 @@
 export type Reducer<S, A extends Action> = (state: S, action: A) => S;
 export type GetState<S> = () => S;
 export type Subscriber<S> = (s: S) => void;
-export type Dispatcher<A extends Action> = (action: A) => void;
+export type Dispatcher<S, A extends Action> = (action: A | ActionThunk<S, A>) => void;
 export type Action = { type: string };
 export type ActionThunk<S, A extends Action> = (
   getState: GetState<S>,
-  dispatcher: Dispatcher<A>
+  dispatcher: Dispatcher<S, A>
 ) => void;
 
 export type Logger<S, A extends Action> = {
@@ -23,8 +23,8 @@ export const makeDefaultLogger = <S, A extends Action>(): Logger<S, A> => ({
 });
 
 export function createStore<S, A extends Action>(
-  reducer: Reducer<S, A>,
   initialState: S,
+  reducer: Reducer<S, A>,
   logger = makeDefaultLogger<S, A>()
 ) {
   let state = initialState;
@@ -35,7 +35,7 @@ export function createStore<S, A extends Action>(
 
   const getState: GetState<S> = () => state;
 
-  const dispatch: Dispatcher<A> = (action) => {
+  const dispatch: Dispatcher<S, A> = (action) => {
     if (isThunk_(action)) {
       action(getState, dispatch);
     } else {
@@ -63,6 +63,6 @@ export function createStore<S, A extends Action>(
 }
 
 // type Max = {type: "s", payload: "foo"} | {type: "f", payload: number};
-// const store = createStore<number, Max>((s, a) =>s + 1, 1);
+// const store = createStore<number, Max>(1, (s, a) =>s + 1);
 // store.dispatch({type: "s", payload: "foo"});
 // console.log(store.getState)

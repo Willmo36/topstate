@@ -16,12 +16,9 @@ export const makeDefaultLogger = <S, A extends Action>(): Logger<S, A> => ({
   logEnd: () => console.groupEnd(),
 });
 
-
 export function createStore<S, A extends Action>(
   initialState: S,
   reducer: Reducer<S, A>,
-
-  //todo replace this with redux dev tools
   logger = makeDefaultLogger<S, A>()
 ): Store<S, A> {
   let state = initialState;
@@ -41,6 +38,7 @@ export function createStore<S, A extends Action>(
       logger.logAction(action);
       state = reducer(state, action);
       logger.logState(state, "next");
+      logger.logEnd();
       subscribers.forEach((notify) => notify(state));
     }
   };

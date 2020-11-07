@@ -1,4 +1,5 @@
 export type Reducer<S, A extends Action> = (state: S, action: A) => S;
+export type IndexedReducer<S, A extends Action> = Partial<Record<A['type'], Reducer<S, A>>>;
 export type GetState<S> = () => S;
 export type Subscriber<S> = (s: S) => void;
 export type Dispatcher<S, A extends Action> = (action: A | ActionThunk<S, A>) => void;

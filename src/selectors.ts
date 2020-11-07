@@ -23,13 +23,14 @@ const arrayShallowEquality = <T>(a1: T[], a2: T[]): boolean =>
 export const memoizeLastResult = <Args extends any[], R>(
   fn: (...args: Args) => R
 ): ((...args: Args) => R) => {
-  let lastArgs: Args = null;
-  let lastResult: R = null;
+  let lastArgs: Args;
+  let lastResult: R;
 
   const fn2 = (...args: Args): R => {
     if (!arrayShallowEquality(args, lastArgs || [])) {
       lastResult = fn(...args);
       lastArgs = args;
+      return lastResult;
     }
     return lastResult;
   };

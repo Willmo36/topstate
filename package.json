@@ -1,8 +1,15 @@
 {
   "name": "topstate",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "1.0.0@alpha.0",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
   "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf ./dist",
+    "build": "yarn clean && yarn tsc"
+  },
   "dependencies": {
     "react": "^17.0.1",
     "typescript": "^4.0.5"

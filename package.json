@@ -1,6 +1,6 @@
 {
   "name": "topstate",
-  "version": "0.1.3",
+  "version": "0.1.9",
   "main": "lib/index.js",
   "typings": "lib/types.d.ts",
   "files": [
@@ -13,7 +13,6 @@
     "prepublishOnly": "yarn build"
   },
   "dependencies": {
-    "react": "^16.8.0",
     "typescript": "^4.0.5"
   },
   "peerDependencies": {

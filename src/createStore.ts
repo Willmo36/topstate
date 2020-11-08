@@ -6,7 +6,8 @@ import {
   GetState,
   Dispatcher,
   Reducer,
-  Store
+  Store,
+  IndexedReducer,
 } from "./types";
 
 export const makeDefaultLogger = <S, A extends Action>(): Logger<S, A> => ({
@@ -57,14 +58,31 @@ export function createStore<S, A extends Action>(
   };
 }
 
+/**
+ * Create a reducer via the form
+ * {
+ *  myAction1: (state, action) => state,
+ *  myAction2: (state, action) => state,
+ * }
+ */
+export const createIndexedReducer = <S, A extends Action>(
+  idxReducers: IndexedReducer<S, A>
+): Reducer<S, A> => (s, a) => {
+  //@ts-ignore
+  const handler: Reducer<S, A> = idxReducers[a.type] || identity;
+  return handler(s, a);
+};
 
-const noop = () => ({})
+//helpers
+const noop = () => ({});
+const identity = <A>(a: A) => a;
+
 /**
  * Noop all logger operations. Useful for testing.
  */
 export const createNoopLogger = <S, A extends Action>(): Logger<S, A> => ({
-    logAction:noop,
-    logEnd: noop,
-    logStart:noop,
-    logState: noop
-})
+  logAction: noop,
+  logEnd: noop,
+  logStart: noop,
+  logState: noop,
+});

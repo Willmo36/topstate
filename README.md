@@ -1,5 +1,6 @@
 # TopState
-## v0.1
+
+### v0.1 WIP
 
 Fully Typed - Redux + Thunks + Reselect + Logging + React bindings
 
@@ -15,8 +16,31 @@ Fully Typed - Redux + Thunks + Reselect + Logging + React bindings
 
 ## The Why
 
-- **TypeScript first -** ensuring `dispatch` is **always** typed and so is consuming state.
-- **Bundle together a "minimum" redux** - Of course, this is opinionated. By doing this we can ensure **commonly used additional libraries are fully typed**. Saves a few packages installs if that's your jam.
+### TypeScript first
+
+The first and foremost requirement across the feature set is everything being correctly typed with as much (useful) inference as possible. A prime example is `dispatch`. The whole flux flow is defined by the `State` object and a union of `Action`s which signal changes to that state object. `Action` is a very important type to this concept and should carried through the API surface. For example, `useDispatch` will automatically be constrained to your `Action` type, no need to respecify at the call site and as such, you cannot dispatch incorrect actions.
+
+### Thunks
+
+It's pretty easy to require async action functionality, so it's baked in. By baking this in, we can ensure `Action` and `getState` are automatically typed from the definition of your `store`.
+
+Another note though, a dedicated "channel" for side effects is very effective for navigating and understanding how, where and why your application has certain effects (as opposed to effects happening at any depth of the component tree).
+
+### Selectors
+
+Computed values, values which are derived from `State`, are very useful to avoid duplication and overlap in your primary `State` model. 
+
+Memoizing at the definition, rather than the usage (by using `React.useMemo`), further enabling expensive computed values. 
+
+Enables Tree skipping. Some application architectures may result in frequent updates deep down in the component tree. Prop drilling is not only verbose but requires the whole tree to recalculate. `useSelector` subscribes directly to the `store`, giving you the option to skip the parent components in the tree if you deem necessary.
+
+### Logger
+
+As mentioned in the Thunks paragraph, a dedicated channel for side effects can be very useful to organize and visualize your application. `redux-logger` showed how useful it is to simply see this information in the console and thus we bundle similar functionality. 
+
+### React
+
+As is the theme, ensuring React bindings are already typed based on your `store`. `useDispatch` already knows your `Action`s, `useSelector` already knows your `State`.
 
 ## The Getting Started
 
@@ -54,7 +78,7 @@ const reducer = createIndexedReducer<State, Action>({
 
     // Won't type check, as this is not a membor of the Action union
     // not_a_action: (state, action) => state
-});
+})
 
 /**
  * Create the store, passing initial State and the reducer
@@ -96,8 +120,7 @@ const App: React.FC = () => {
 };
 
 /**
- * Provider comes from creating the React bindings.
- * Expects `store` to be Store<State, Action>
+ * Provider comes from creating the React bindings
  */
 render(
   <StoreContext.Provider value={store}>

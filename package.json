@@ -1,6 +1,11 @@
 {
   "name": "topstate",
   "version": "0.2.0",
+  "author": {
+    "email": "max.willmo@gmail.com",
+    "name": "Max Willmott",
+    "url": "https://github.com/Willmo36"
+  },
   "main": "lib/index.js",
   "typings": "lib/types.d.ts",
   "files": [
@@ -12,13 +17,11 @@
     "build": "yarn clean && yarn tsc",
     "prepublishOnly": "yarn build"
   },
-  "dependencies": {
-    "typescript": "^4.0.5"
-  },
   "peerDependencies": {
     "react": "^16.8.0"
   },
   "devDependencies": {
+    "typescript": "^4.0.5",
     "@testing-library/react-hooks": "^3.4.2",
     "@types/jest": "^26.0.15",
     "@types/react": "^16.9.55",
@@ -26,5 +29,17 @@
     "react-test-renderer": "^16.8.0",
     "ts-jest": "^26.4.3",
     "ts-node": "^9.0.0"
-  }
+  },
+  "tags": [
+    "typescript",
+    "flux",
+    "redux",
+    "react"
+  ],
+  "keywords": [
+    "typescript",
+    "flux",
+    "redux",
+    "react"
+  ]
 }

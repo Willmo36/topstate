@@ -13,9 +13,10 @@
   ],
   "license": "MIT",
   "scripts": {
+    "test": "jest",
     "clean": "rm -rf ./lib",
     "build": "yarn clean && yarn tsc",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "yarn test && yarn build"
   },
   "peerDependencies": {
     "react": "^16.8.0"

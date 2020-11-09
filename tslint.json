@@ -8,7 +8,6 @@
       "ter-indent": false,
       "strict-boolean-expressions": true,
       "forin": true,
-      "array-type": [true, "generic"],
       "semicolon": true
     }
   }

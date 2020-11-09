@@ -1,4 +1,14 @@
-import { Action, Logger, Subscriber, ActionThunk, GetState, Dispatcher, Reducer, Store, IndexedReducer } from "./types";
+import {
+	Action,
+	Logger,
+	Subscriber,
+	ActionThunk,
+	GetState,
+	Dispatcher,
+	Reducer,
+	Store,
+	IndexedReducer
+} from "./types";
 
 export const makeDefaultLogger = <S, A extends Action>(): Logger<S, A> => ({
 	logStart: (action) => console.group(`action ${action.type}`),
@@ -15,7 +25,8 @@ export function createStore<S, A extends Action>(
 	let state = initialState;
 	let subscribers: Subscriber<S>[] = [];
 
-	const isThunk_ = (action: unknown): action is ActionThunk<S, A> => typeof action === "function";
+	const isThunk_ = (action: unknown): action is ActionThunk<S, A> =>
+		typeof action === "function";
 
 	const getState: GetState<S> = () => state;
 
@@ -54,16 +65,15 @@ export function createStore<S, A extends Action>(
  *  myAction2: (state, action) => state,
  * }
  */
-export const createIndexedReducer = <S, A extends Action>(idxReducers: IndexedReducer<S, A>): Reducer<S, A> => (
-	s,
-	a
-) => {
-	//@ts-ignore
-	const handler: Reducer<S, A> = idxReducers[a.type] || identity;
-	return handler(s, a);
+export const createIndexedReducer = <S, A extends Action>(
+	idxReducers: IndexedReducer<S, A>
+): Reducer<S, A> => (state, action) => {
+	// @ts-ignore
+	const handler: Reducer<S, A> = idxReducers[action.type] ?? identity;
+	return handler(state, action);
 };
 
-//helpers
+// helpers
 const noop = () => ({});
 const identity = <A>(a: A) => a;
 

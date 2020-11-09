@@ -33,7 +33,9 @@ export function createStoreReactFns<S, A extends Action>() {
 
 const assertStoreContextValue = <S>(value: S | null): S => {
 	if (value === null) {
-		throw new Error("Found no Store when trying to read from the context provider.");
+		throw new Error(
+			"Found no Store when trying to read from the context provider."
+		);
 	}
 	return value;
 };

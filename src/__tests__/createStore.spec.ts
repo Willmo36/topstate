@@ -1,4 +1,8 @@
-import { createIndexedReducer, createNoopLogger, createStore } from "../createStore";
+import {
+	createIndexedReducer,
+	createNoopLogger,
+	createStore
+} from "../createStore";
 import { ActionThunk, Logger } from "../types";
 const identity = <A>(a: A) => a;
 

@@ -9,7 +9,12 @@ type TestState = {
 	foo: number;
 };
 
-const { StoreContext, useDispatch, useSelector, useStore } = createStoreReactFns<TestState, TestAction>();
+const {
+	StoreContext,
+	useDispatch,
+	useSelector,
+	useStore
+} = createStoreReactFns<TestState, TestAction>();
 
 const initialState: TestState = { foo: 0 };
 const store = createStore<TestState, TestAction>(

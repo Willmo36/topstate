@@ -33,7 +33,10 @@ describe("selectors", () => {
 			const selector_a = createSelector<TestState, number>((s) => s.foo);
 			const selector_b = createSelector<TestState, number>((s) => s.foo * 2);
 
-			const selector_ab = createCompoundSelector([selector_a, selector_b], (a, b) => a + b);
+			const selector_ab = createCompoundSelector(
+				[selector_a, selector_b],
+				(a, b) => a + b
+			);
 
 			const result = selector_ab(state);
 
@@ -47,7 +50,10 @@ describe("selectors", () => {
 			const selector_a = createSelector<TestState, {}>((s) => s);
 			const selector_b = createSelector<TestState, {}>((s) => s);
 
-			const selector_ab = createCompoundSelector([selector_a, selector_b], (a, b) => ({}));
+			const selector_ab = createCompoundSelector(
+				[selector_a, selector_b],
+				(a, b) => ({})
+			);
 
 			const result1 = selector_ab(state);
 			const result2 = selector_ab(state);

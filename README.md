@@ -129,3 +129,6 @@ render(
   document.getElementById("app")
 );
 ```
+
+# Licence
+The MIT License (MIT)

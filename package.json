@@ -14,7 +14,10 @@
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "clean": "rm -rf ./lib",
+    "tslint": "tslint -c tslint.json --project tsconfig.json './src/**/*.ts{,x}'",
+    "prettier": "prettier --list-different \"./src/**/*.ts{,x}\"",
+    "prettier:fix": "prettier --write \"./src/**/*.ts{,x}\"",
+    "clean": "rimraf lib",
     "build": "yarn clean && yarn tsc",
     "prepublishOnly": "yarn test && yarn build"
   },
@@ -22,14 +25,18 @@
     "react": "^16.8.0"
   },
   "devDependencies": {
-    "typescript": "^4.0.5",
     "@testing-library/react-hooks": "^3.4.2",
     "@types/jest": "^26.0.15",
     "@types/react": "^16.9.55",
     "jest": "^26.6.1",
+    "prettier": "^2.1.2",
     "react-test-renderer": "^16.8.0",
+    "rimraf": "^3.0.2",
     "ts-jest": "^26.4.3",
-    "ts-node": "^9.0.0"
+    "ts-node": "^9.0.0",
+    "tslint": "^6.1.3",
+    "tslint-config-standard": "^9.0.0",
+    "typescript": "^4.0.5"
   },
   "tags": [
     "typescript",

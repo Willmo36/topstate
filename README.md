@@ -48,7 +48,7 @@ As is the theme, ensuring React bindings are already typed based on your `store`
 import * as React from "react";
 import { render } from "react-dom";
 import { createIndexedReducer, createStore } from "topstate/lib/createStore";
-import { createStoreReactFns } from "topstate/lib/react";
+import { createReactBindings } from "topstate/lib/createReactBindings";
 
 /**
  * The central types of TopState are
@@ -95,7 +95,7 @@ const {
   useSelector,
   useStore,
   StoreContext,
-} = createStoreReactFns<State, Action>();
+} = createReactBindings<State, Action>();
 
 const App: React.FC = () => {
 

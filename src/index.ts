@@ -1,3 +1,3 @@
 export * from "./createStore";
-export * from "./react";
+export * from "./createReactBindings";
 export * from "./selectors";

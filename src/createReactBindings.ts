@@ -2,7 +2,7 @@ import * as React from "react";
 import { Selector } from "./selectors";
 import { Action, Store } from "./types";
 
-export function createStoreReactFns<S, A extends Action>() {
+export function createReactBindings<S, A extends Action>() {
 	const StoreContext = React.createContext<Store<S, A> | null>(null);
 
 	const useStore = () => {

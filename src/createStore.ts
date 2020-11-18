@@ -7,7 +7,7 @@ import {
 	Dispatcher,
 	Reducer,
 	Store,
-	IndexedReducer
+	IndexedReducer as ActionHandlers
 } from "./types";
 
 export const makeDefaultLogger = <S, A extends Action>(): Logger<S, A> => ({
@@ -65,12 +65,38 @@ export function createStore<S, A extends Action>(
  *  myAction2: (state, action) => state,
  * }
  */
-export const createIndexedReducer = <S, A extends Action>(
-	idxReducers: IndexedReducer<S, A>
+export const createReducer = <S, A extends Action>(
+	handlers: ActionHandlers<S, A>
 ): Reducer<S, A> => (state, action) => {
 	// @ts-ignore
-	const handler: Reducer<S, A> = idxReducers[action.type] ?? identity;
+	const handler: Reducer<S, A> = handlers[action.type] ?? identity;
 	return handler(state, action);
+};
+
+export const createSubReducer = <SA extends Object, A extends Action>(
+	key: keyof SA,
+	handlers: ActionHandlers<SA[typeof key], A>
+): Reducer<SA, A> => (state, action) => {
+	// @ts-ignore
+	const handler: Reducer<SB, A> = handlers[action.type] ?? identity;
+	const s: SA = {
+		...state,
+		[key]: handler(state[key], action)
+	};
+
+	return s;
+};
+
+export const combineReducers = <S, A extends Action>(
+	reducers: Reducer<S, A>[]
+): Reducer<S, A> => (state, action) => {
+	for (let i = 0; i < reducers.length; i++) {
+		const ns = reducers[i](state, action);
+		if (ns !== state) {
+			return ns;
+		}
+	}
+	return state;
 };
 
 // helpers

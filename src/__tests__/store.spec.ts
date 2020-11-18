@@ -1,8 +1,13 @@
-import { createReducer, createNoopLogger, createStore, combineReducers } from "../createStore";
+import {
+	createReducer,
+	createNoopLogger,
+	createStore,
+	combineReducers
+} from "../store";
 import { ActionThunk, Logger, Reducer } from "../types";
 const identity = <A>(a: A) => a;
 
-describe("createStore", () => {
+describe("store", () => {
 	describe("createStore", () => {
 		it("should set and get the initial state", () => {
 			const initialState = { foo: 1 };
@@ -35,30 +40,30 @@ describe("createStore", () => {
 
 			const initial: State = { foo: 0 };
 			const reducer = createReducer<State, Inc>({
-				// 		inc: (s) => ({ foo: s.foo + 1 })
-				// 	});
+				inc: (s) => ({ foo: s.foo + 1 })
+			});
 
-				// 	const store = createStore(initial, reducer, createNoopLogger());
+			const store = createStore(initial, reducer, createNoopLogger());
 
-				// 	const thunk: ActionThunk<State, Inc> = (getState, dispatch) => {
-				// 		expect(getState()).toBe(initial);
-				// 		dispatch({ type: "inc" });
-				// 		expect(getState()).toEqual({ foo: 1 });
-				// 		dispatch({ type: "inc" });
-				// 		expect(getState()).toEqual({ foo: 2 });
-				// 	};
+			const thunk: ActionThunk<State, Inc> = (getState, dispatch) => {
+				expect(getState()).toBe(initial);
+				dispatch({ type: "inc" });
+				expect(getState()).toEqual({ foo: 1 });
+				dispatch({ type: "inc" });
+				expect(getState()).toEqual({ foo: 2 });
+			};
 
-				// 	expect(store.getState()).toBe(initial);
-				// 	store.dispatch(thunk);
-				// 	expect(store.getState()).toEqual({ foo: 2 });
-				// });
+			expect(store.getState()).toBe(initial);
+			store.dispatch(thunk);
+			expect(store.getState()).toEqual({ foo: 2 });
+		});
 
-				// it("should invoke logger functions", () => {
-				// 	type Inc = { type: "inc" };
-				// 	type State = { foo: number };
+		it("should invoke logger functions", () => {
+			type Inc = { type: "inc" };
+			type State = { foo: number };
 
-				// 	const initial: State = { foo: 0 };
-				// 	const reducer = createReducer<State, Inc>({
+			const initial: State = { foo: 0 };
+			const reducer = createReducer<State, Inc>({
 				inc: (s) => ({ foo: s.foo + 1 })
 			});
 
@@ -191,22 +196,24 @@ describe("createStore", () => {
 			expect(store.getState()).toBe(initial);
 		});
 	});
-	
-	describe('combineReducers', () => {
-		it("should combine 2 reducers, one with handler, one with fallback", () => {				
-						type Inc = { type: "inc" };
+
+	describe("combineReducers", () => {
+		it("should combine 2 reducers, one with handler, one with fallback", () => {
+			type Inc = { type: "inc" };
 			type State = { foo: number };
 
 			const initial: State = { foo: 0 };
 			const incHandler = jest.fn(identity);
-			const reducer1: Reducer<State, Inc> = createReducer<State, Inc>({"inc": incHandler});
+			const reducer1: Reducer<State, Inc> = createReducer<State, Inc>({
+				inc: incHandler
+			});
 			const reducer2: Reducer<State, Inc> = jest.fn(identity);
 
 			const reducer = combineReducers([reducer1, reducer2]);
 
 			const store = createStore(initial, reducer, createNoopLogger());
 
-			store.dispatch({type: "inc"});
+			store.dispatch({ type: "inc" });
 
 			expect(incHandler).toHaveBeenCalledTimes(1);
 			expect(reducer2).toHaveBeenCalled();

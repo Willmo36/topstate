@@ -1,6 +1,6 @@
 import { act, renderHook } from "@testing-library/react-hooks";
 import * as React from "react";
-import { createNoopLogger, createStore } from "../createStore";
+import { createNoopLogger, createStore } from "../store";
 import { createReactBindings } from "../createReactBindings";
 import { Selector } from "../selectors";
 

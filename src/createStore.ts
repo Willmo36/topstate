@@ -90,13 +90,7 @@ export const createSubReducer = <SA extends Object, A extends Action>(
 export const combineReducers = <S, A extends Action>(
 	reducers: Reducer<S, A>[]
 ): Reducer<S, A> => (state, action) => {
-	for (let i = 0; i < reducers.length; i++) {
-		const ns = reducers[i](state, action);
-		if (ns !== state) {
-			return ns;
-		}
-	}
-	return state;
+	return reducers.reduce((ns, rec) => rec(ns, action), state);
 };
 
 // helpers

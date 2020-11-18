@@ -1,5 +1,5 @@
-import { createReducer, createNoopLogger, createStore } from "../createStore";
-import { ActionThunk, Logger } from "../types";
+import { createReducer, createNoopLogger, createStore, combineReducers } from "../createStore";
+import { ActionThunk, Logger, Reducer } from "../types";
 const identity = <A>(a: A) => a;
 
 describe("createStore", () => {
@@ -153,6 +153,7 @@ describe("createStore", () => {
 			expect(store.getState()).toBe(initial);
 		});
 	});
+
 	describe("createSubReducer", () => {
 		it("should return a reducer handling the given actions for a given key", () => {
 			type Inc = { type: "inc" };
@@ -188,6 +189,27 @@ describe("createStore", () => {
 
 			store.dispatch({ type: "inc" });
 			expect(store.getState()).toBe(initial);
+		});
+	});
+	
+	describe('combineReducers', () => {
+		it("should combine 2 reducers, one with handler, one with fallback", () => {				
+						type Inc = { type: "inc" };
+			type State = { foo: number };
+
+			const initial: State = { foo: 0 };
+			const incHandler = jest.fn(identity);
+			const reducer1: Reducer<State, Inc> = createReducer<State, Inc>({"inc": incHandler});
+			const reducer2: Reducer<State, Inc> = jest.fn(identity);
+
+			const reducer = combineReducers([reducer1, reducer2]);
+
+			const store = createStore(initial, reducer, createNoopLogger());
+
+			store.dispatch({type: "inc"});
+
+			expect(incHandler).toHaveBeenCalledTimes(1);
+			expect(reducer2).toHaveBeenCalled();
 		});
 	});
 });

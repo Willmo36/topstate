@@ -47,8 +47,7 @@ As is the theme, ensuring React bindings are already typed based on your `store`
 ```tsx
 import * as React from "react";
 import { render } from "react-dom";
-import { createIndexedReducer, createStore } from "topstate/lib/createStore";
-import { createReactBindings } from "topstate/lib/createReactBindings";
+import { createReducer, createStore, createReactBindings } from "topstate"
 
 /**
  * The central types of TopState are
@@ -65,13 +64,13 @@ const dec = { type: "dec" } as const;
 type Action = typeof inc | typeof dec;
 
 /**
- * createIndexedReducer is a helper function to create reducers
+ * createReducer is a helper function to create reducers
  * by handling actions individually.
  * 
  * Fully typed, the `action` will be the member Action
  * specified by the key
  */
-const reducer = createIndexedReducer<State, Action>({
+const reducer = createReducer<State, Action>({
     inc: state => ({count: state.count + 1}),
 
     dec: (state,action) => ({count: state.count - 1}),

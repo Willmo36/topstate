@@ -1,13 +1,13 @@
 {
   "name": "topstate",
-  "version": "0.2.1",
+  "version": "0.3.1",
   "author": {
     "email": "max.willmo@gmail.com",
     "name": "Max Willmott",
     "url": "https://github.com/Willmo36"
   },
   "main": "lib/index.js",
-  "typings": "lib/types.d.ts",
+  "typings": "lib/index.d.ts",
   "files": [
     "lib"
   ],

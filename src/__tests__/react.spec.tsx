@@ -1,7 +1,7 @@
 import { act, renderHook } from "@testing-library/react-hooks";
 import * as React from "react";
-import { createNoopLogger, createStore } from "../createStore";
-import { createStoreReactFns } from "../react";
+import { createNoopLogger, createStore } from "../store";
+import { createReactBindings } from "../createReactBindings";
 import { Selector } from "../selectors";
 
 type TestAction = { type: "inc" };
@@ -14,7 +14,7 @@ const {
 	useDispatch,
 	useSelector,
 	useStore
-} = createStoreReactFns<TestState, TestAction>();
+} = createReactBindings<TestState, TestAction>();
 
 const initialState: TestState = { foo: 0 };
 const store = createStore<TestState, TestAction>(

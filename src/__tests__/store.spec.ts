@@ -1,12 +1,13 @@
 import {
-	createIndexedReducer,
+	createReducer,
 	createNoopLogger,
-	createStore
-} from "../createStore";
-import { ActionThunk, Logger } from "../types";
+	createStore,
+	combineReducers
+} from "../store";
+import { ActionThunk, Logger, Reducer } from "../types";
 const identity = <A>(a: A) => a;
 
-describe("createStore", () => {
+describe("store", () => {
 	describe("createStore", () => {
 		it("should set and get the initial state", () => {
 			const initialState = { foo: 1 };
@@ -20,7 +21,7 @@ describe("createStore", () => {
 			type State = { foo: number };
 
 			const initial: State = { foo: 0 };
-			const reducer = createIndexedReducer<State, Inc>({
+			const reducer = createReducer<State, Inc>({
 				inc: (s) => ({ foo: s.foo + 1 })
 			});
 
@@ -38,7 +39,7 @@ describe("createStore", () => {
 			type State = { foo: number };
 
 			const initial: State = { foo: 0 };
-			const reducer = createIndexedReducer<State, Inc>({
+			const reducer = createReducer<State, Inc>({
 				inc: (s) => ({ foo: s.foo + 1 })
 			});
 
@@ -62,7 +63,7 @@ describe("createStore", () => {
 			type State = { foo: number };
 
 			const initial: State = { foo: 0 };
-			const reducer = createIndexedReducer<State, Inc>({
+			const reducer = createReducer<State, Inc>({
 				inc: (s) => ({ foo: s.foo + 1 })
 			});
 
@@ -87,7 +88,7 @@ describe("createStore", () => {
 			type State = { foo: number };
 
 			const initial: State = { foo: 0 };
-			const reducer = createIndexedReducer<State, Inc>({
+			const reducer = createReducer<State, Inc>({
 				inc: (s) => ({ foo: s.foo + 1 })
 			});
 
@@ -122,7 +123,7 @@ describe("createStore", () => {
 		});
 	});
 
-	describe("createIndexedReducer", () => {
+	describe("createReducer", () => {
 		it("should return a reducer handling the given actions", () => {
 			type Inc = { type: "inc" };
 			type State = { foo: number };
@@ -130,7 +131,7 @@ describe("createStore", () => {
 			const initial: State = { foo: 0 };
 
 			const incMock = jest.fn((s: State) => ({ foo: s.foo + 1 }));
-			const reducer = createIndexedReducer<State, Inc>({
+			const reducer = createReducer<State, Inc>({
 				inc: incMock
 			});
 
@@ -149,12 +150,73 @@ describe("createStore", () => {
 			type State = { foo: number };
 
 			const initial: State = { foo: 0 };
-			const reducer = createIndexedReducer<State, Inc>({});
+			const reducer = createReducer<State, Inc>({});
 
 			const store = createStore(initial, reducer, createNoopLogger());
 
 			store.dispatch({ type: "inc" });
 			expect(store.getState()).toBe(initial);
+		});
+	});
+
+	describe("createSubReducer", () => {
+		it("should return a reducer handling the given actions for a given key", () => {
+			type Inc = { type: "inc" };
+			type SubState = { bar: number };
+			type State = { foo: SubState };
+
+			const initial: State = { foo: { bar: 0 } };
+
+			const incMock = jest.fn((s: State) => ({ foo: { bar: s.foo.bar + 1 } }));
+			const reducer = createReducer<State, Inc>({
+				inc: incMock
+			});
+
+			const store = createStore(initial, reducer, createNoopLogger());
+
+			store.dispatch({ type: "inc" });
+			expect(store.getState()).toEqual({ foo: { bar: 1 } });
+			expect(incMock).toHaveBeenCalledTimes(1);
+			store.dispatch({ type: "inc" });
+			expect(incMock).toHaveBeenCalledTimes(2);
+			expect(store.getState()).toEqual({ foo: { bar: 2 } });
+		});
+
+		it("should return a reducer with fallbacks for unhandled actions", () => {
+			type Inc = { type: "inc" };
+			type SubState = { bar: number };
+			type State = { foo: SubState };
+
+			const initial: State = { foo: { bar: 0 } };
+			const reducer = createReducer<State, Inc>({});
+
+			const store = createStore(initial, reducer, createNoopLogger());
+
+			store.dispatch({ type: "inc" });
+			expect(store.getState()).toBe(initial);
+		});
+	});
+
+	describe("combineReducers", () => {
+		it("should combine 2 reducers, one with handler, one with fallback", () => {
+			type Inc = { type: "inc" };
+			type State = { foo: number };
+
+			const initial: State = { foo: 0 };
+			const incHandler = jest.fn(identity);
+			const reducer1: Reducer<State, Inc> = createReducer<State, Inc>({
+				inc: incHandler
+			});
+			const reducer2: Reducer<State, Inc> = jest.fn(identity);
+
+			const reducer = combineReducers([reducer1, reducer2]);
+
+			const store = createStore(initial, reducer, createNoopLogger());
+
+			store.dispatch({ type: "inc" });
+
+			expect(incHandler).toHaveBeenCalledTimes(1);
+			expect(reducer2).toHaveBeenCalled();
 		});
 	});
 });

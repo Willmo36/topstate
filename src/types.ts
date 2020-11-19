@@ -1,6 +1,6 @@
 export type Reducer<S, A extends Action> = (state: S, action: A) => S;
 // distribute over A in order to ensure the action in the handler is the action type used in as the key
-export type IndexedReducer<S, A extends Action> = A extends any
+export type ActionHandlers<S, A extends Action> = A extends any
 	? Partial<Record<A["type"], Reducer<S, A>>>
 	: never;
 export type GetState<S> = () => S;

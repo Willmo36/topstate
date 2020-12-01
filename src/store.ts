@@ -19,11 +19,11 @@ export const makeDefaultLogger = <S, A extends Action>(): Logger<S, A> => ({
 
 export function createStore<S, A extends Action>(
 	initialState: S,
-	reducer: Reducer<S, A>,
 	logger = makeDefaultLogger<S, A>()
 ): Store<S, A> {
 	let state = initialState;
 	let subscribers: Subscriber<S>[] = [];
+	let reducers: Reducer<S, A>[] = [];
 
 	const isThunk_ = (action: unknown): action is ActionThunk<S, A> =>
 		typeof action === "function";
@@ -37,7 +37,10 @@ export function createStore<S, A extends Action>(
 			logger.logStart(action);
 			logger.logState(state, "prev");
 			logger.logAction(action);
-			state = reducer(state, action);
+			state = reducers.reduce(
+				(state_, reducer) => reducer(state_, action),
+				state
+			);
 			logger.logState(state, "next");
 			logger.logEnd();
 			subscribers.forEach((notify) => notify(state));
@@ -51,10 +54,37 @@ export function createStore<S, A extends Action>(
 		};
 	};
 
+	const addReducer = (reducer: Reducer<S, A>) => {
+		reducers.push(reducer);
+		return () => {
+			reducers = reducers.filter((r) => r !== reducer);
+		};
+	};
+
+	const addSubReducer = <K extends keyof S>(
+		key: K,
+		reducer: Reducer<S[K], A>
+	) => {
+		const lifted: Reducer<S, A> = (state, action) => {
+			const result = reducer(state[key], action);
+			if (result !== state[key]) {
+				return { ...state, [key]: result };
+			}
+			return state;
+		};
+
+		reducers.push(lifted);
+		return () => {
+			reducers = reducers.filter((r) => r !== lifted);
+		};
+	};
+
 	return {
 		getState,
 		dispatch,
-		subscribe
+		subscribe,
+		addReducer,
+		addSubReducer
 	};
 }
 
@@ -65,42 +95,12 @@ export function createStore<S, A extends Action>(
  *  myAction2: (state, action) => state,
  * }
  */
-export const createReducer = <S, A extends Action>(
+export const reducerFromHandlers = <S, A extends Action>(
 	handlers: ActionHandlers<S, A>
 ): Reducer<S, A> => (state, action) => {
 	// @ts-ignore
 	const handler: Reducer<S, A> = handlers[action.type] ?? identity;
 	return handler(state, action);
-};
-
-/**
- * Create a reducer for a child of the State
- * @param key The member of the State these handlers operator on
- * @param handlers Handlers for Action which take and return State[Key]
- */
-export const createSubReducer = <State extends Object, A extends Action>(
-	key: keyof State,
-	handlers: ActionHandlers<State[typeof key], A>
-): Reducer<State, A> => (state, action) => {
-	// @ts-ignore
-	const handler: Reducer<SB, A> = handlers[action.type] ?? identity;
-	const s: State = {
-		...state,
-		[key]: handler(state[key], action)
-	};
-
-	return s;
-};
-
-/**
- * Combine multiple Reducers<State, A>.
- * All reducers will be ran in the order specificed per dispatch
- * @param reducers Array an reducers to combine
- */
-export const combineReducers = <S, A extends Action>(
-	reducers: Reducer<S, A>[]
-): Reducer<S, A> => (state, action) => {
-	return reducers.reduce((ns, rec) => rec(ns, action), state);
 };
 
 // helpers

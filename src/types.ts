@@ -25,4 +25,6 @@ export type Store<S, A extends Action> = {
 	getState: GetState<S>;
 	dispatch: Dispatcher<S, A>;
 	subscribe: (cb: Subscriber<S>) => () => void;
+	addReducer: (reducer: Reducer<S, A>) => () => void;
+	addSubReducer: <K extends keyof S>(key: K, reducer: Reducer<S[K], A>) => () => void;
 };

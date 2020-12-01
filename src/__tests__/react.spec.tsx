@@ -19,16 +19,16 @@ const {
 const initialState: TestState = { foo: 0 };
 const store = createStore<TestState, TestAction>(
 	initialState,
-	(s, a) => {
-		switch (a.type) {
-			case "inc":
-				return { foo: s.foo + 1 };
-			default:
-				return s;
-		}
-	},
 	createNoopLogger()
 );
+store.addReducer((s, a) => {
+	switch (a.type) {
+		case "inc":
+			return { foo: s.foo + 1 };
+		default:
+			return s;
+	}
+});
 
 const wrapper = ({ children }: { children: React.ReactChildren }) => (
 	<StoreContext.Provider value={store}>{children}</StoreContext.Provider>
@@ -70,6 +70,6 @@ describe("react", () => {
 			expect(result.current).toEqual(nextFoo);
 		});
 
-		//todo add case ensuring component does NOT rerender upon a selector resulting in same value
+		// todo add case ensuring component does NOT rerender upon a selector resulting in same value
 	});
 });

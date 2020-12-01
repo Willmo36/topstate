@@ -47,7 +47,7 @@ As is the theme, ensuring React bindings are already typed based on your `store`
 ```tsx
 import * as React from "react";
 import { render } from "react-dom";
-import { createReducer, createStore, createReactBindings } from "topstate"
+import { reducerFromHandlers, createStore, createReactBindings } from "topstate"
 
 /**
  * The central types of TopState are
@@ -60,30 +60,35 @@ type State = {
 
 const inc = { type: "inc" } as const;
 const dec = { type: "dec" } as const;
-
 type Action = typeof inc | typeof dec;
 
 /**
- * createReducer is a helper function to create reducers
+ * Create the store, passing initial State
+ * Notice we also pass the Action union type, locking it in
+ */
+let store = createStore<State, Action>({ count: 0 });
+
+
+/**
+ * reducerFromHandlers is a helper function to create reducers
  * by handling actions individually.
  * 
  * Fully typed, the `action` will be the member Action
  * specified by the key
  */
-const reducer = createReducer<State, Action>({
-    inc: state => ({count: state.count + 1}),
+const reducer = reducerFromHandlers<State, Action>({
+  inc: (state, action) => ({count: state.count + 1}),
 
-    dec: (state,action) => ({count: state.count - 1}),
+  dec: (state,action) => ({count: state.count - 1}),
 
-    // Won't type check, as this is not a membor of the Action union
-    // not_a_action: (state, action) => state
+  // Won't type check, as this is not a membor of the Action union
+  // not_a_action: (state, action) => state
 })
 
 /**
- * Create the store, passing initial State and the reducer
- * Notice we also pass the Action union type, locking it in
+ * register the reducer in the store
  */
-const store = createStore<State, Action>({ count: 0 }, reducer);
+const removeReducer = store.addReducer(reducer);
 
 /**
  * We "create" the React bindings, again passing the State & Action types

@@ -1,12 +1,21 @@
-import * as React from "react";
+import {
+	useContext,
+	createContext,
+	useState,
+	useEffect,
+	useCallback
+} from "react";
 import { Selector } from "./selectors";
 import { Action, Store } from "./types";
 
 export function createReactBindings<S, A extends Action>() {
-	const StoreContext = React.createContext<Store<S, A> | null>(null);
+	const StoreContext = createContext<Store<S, A> | null>(null);
 
+	/**
+	 * Test comment
+	 */
 	const useStore = () => {
-		const store = React.useContext(StoreContext);
+		const store = useContext(StoreContext);
 		return assertStoreContextValue(store);
 	};
 
@@ -14,8 +23,8 @@ export function createReactBindings<S, A extends Action>() {
 
 	const useSelector = <A>(selector: Selector<S, A>): A => {
 		const store = useStore();
-		const [result, setResult] = React.useState(selector(store.getState()));
-		React.useEffect(() => {
+		const [result, setResult] = useState(selector(store.getState()));
+		useEffect(() => {
 			const unsubscribe = store.subscribe((state) => {
 				setResult(selector(state));
 			});
@@ -28,7 +37,30 @@ export function createReactBindings<S, A extends Action>() {
 		return result;
 	};
 
-	return { useStore, useDispatch, useSelector, StoreContext };
+	const useActionCreator = <B = void>(fn: (b: B) => A) => {
+		const dispatch = useDispatch();
+		return useCallback(
+			(b: B) => {
+				dispatch(fn(b));
+			},
+			[dispatch]
+		);
+	};
+
+	const useAction = (action: A) => {
+		const dispatch = useDispatch();
+		return useCallback(() => {
+			dispatch(action);
+		}, [dispatch]);
+	};
+	return {
+		useStore,
+		useDispatch,
+		useSelector,
+		useAction,
+		useActionCreator,
+		StoreContext
+	};
 }
 
 const assertStoreContextValue = <S>(value: S | null): S => {

@@ -98,7 +98,6 @@ export function createStore<S, A extends Action>(
 export const reducerFromHandlers = <S, A extends Action>(
 	handlers: ActionHandlers<S, A>
 ): Reducer<S, A> => (state, action) => {
-	// @ts-ignore
 	const handler: Reducer<S, A> = handlers[action.type] ?? identity;
 	return handler(state, action);
 };

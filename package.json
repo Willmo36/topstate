@@ -20,6 +20,7 @@
     "prettier:fix": "prettier --write \"./src/**/*.ts{,x}\"",
     "clean": "rimraf lib",
     "build": "yarn clean && yarn tsc",
+    "builddocs": "yarn typedoc ./src",
     "prepublishOnly": "yarn test && yarn build"
   },
   "peerDependencies": {

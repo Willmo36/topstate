@@ -1,4 +1,3 @@
-# TopState
 
 # Library goal
 

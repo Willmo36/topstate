@@ -26,6 +26,7 @@ export const memoizeLastResult = <Args extends any[], R>(
 
 /**
  * Memoized function from S to A
+ * @category Primary API
  * @param fn Create an A from S
  * @param memoize Defaulted: Memoize implementation
  * @typeParam S State type
@@ -44,6 +45,7 @@ export const createSelector = <S, A>(
 /**
  * Create a selector from numerous other selectors.
  * Advised to use type inference over supplying these types.
+ * @category Primary API
  * @param selectors Selectors whom results shall be passed to fn
  * @param fn Take the results of the given the selectors and return some value B
  * @param memoize Defaulted: Memoize implementation

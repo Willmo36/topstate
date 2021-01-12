@@ -1,33 +1,39 @@
 /**
  * The base type for a tagged union via the `type` property.
+ * @category Inferred 
  */
 export type Action = { type: string };
 
 /**
  * Classical reducer. Takes state & an action returs a new state.
+ * @category Inferred 
  */
 export type Reducer<S, A extends Action> = (state: S, action: A) => S;
 
 /**
  * A record keyed by Actions where the value is a reducer taking that action.
  * See {@link reducerFromHandlers} for usage.
+ * @category Inferred
  */
 export type ActionHandlers<S, A extends Action> = A extends any
 	? Partial<Record<A["type"], Reducer<S, A>>>
 	: never;
 /**
  * Return the current state value
+ * @category Store API
  */
 export type GetState<S> = () => S;
 
 /**
  * Callback to be ran upon state changes
+ * @ignore
  */
 export type Subscriber<S> = (s: S) => void;
 
 /**
  * - Action - Pass the action to the reducers, updating the state, triggering the subscribers.
  * - ActionThunk - Execute the thunk, passing {@link Dispatcher} & {@link GetState}
+ * @category Store API
  * @param action The action to run the reducers with
  * @returns void Fire & Forget
  */
@@ -55,6 +61,7 @@ export type Logger<S, A extends Action> = {
 
 /**
  * The core data type, Store.
+ * @category Store API
  * @returns Functions for interacting with the store.
  * See documentation for more info on each of them.
  */
@@ -63,6 +70,7 @@ export type Store<S, A extends Action> = {
 	dispatch: Dispatcher<S, A>;
 	/**
 	 * Subscribe to the store. The given callback is ran after every dispatch() call.
+	 * @category Store API
 	 * @param cb Callback to run after dispatches
 	 * @returns Function to deregister the callback
 	 */
@@ -88,13 +96,11 @@ export type Store<S, A extends Action> = {
 /**
  * Function from S to A
  */
-export interface Selector<S, A> {
-	(s: S): A;
-}
+export type Selector<S, A>  = (s: S) => A;
 
 /**
  * Return the A of Selector<S, A>
- * @internal
+ * @ignore
  */
 export type SelectorResult<SL> = SL extends (...args: any) => infer A
 	? A
@@ -102,7 +108,7 @@ export type SelectorResult<SL> = SL extends (...args: any) => infer A
 
 /**
  * Apply SelectorResult to each member of a collection
- * @internal
+ * @ignore
  */
 export type SelectorResults<S> = {
 	[K in keyof S]: SelectorResult<S[K]>;
@@ -110,7 +116,7 @@ export type SelectorResults<S> = {
 
 /**
  * Lift values into selectors from S
- * @internal
+ * @ignore
  */
 export type LiftToSelector<S, AS> = {
 	[K in keyof AS]: Selector<S, AS[K]>;
@@ -124,3 +130,53 @@ export type LiftToSelector<S, AS> = {
 export type Memoize = <Args extends any[], R>(
 	fn: (...args: Args) => R
 ) => (...args: Args) => R;
+
+/** @category Store API */
+export type StoreReact<S, A extends Action> = {
+	/**
+	 * @returns The Store from the React Context
+	 * @example ```
+	 * const store = useStore();
+	 * ```
+	 */
+	useStore: () => Store<S, A>;
+	/**
+	 * @returns The Store.dispatch from the React Context
+	 * @example ```
+	 * const dispatch = useDispatch();
+	 * dispatch(myAction|myThunk);
+	 * ```
+	 */
+	useDispatch: () => Dispatcher<S, A>;
+	/**
+	 * Subscribe to the Store and run the selector upon state changes
+	 * @param selector - The selector to run
+	 * @example ```
+	 * const foo = useSelector(fooSelector);
+	 * ```
+	 */
+	useSelector: <A>(selector: Selector<S, A>) => A;
+	/**
+	 * Create a callback to dispatch the given action
+	 * @param action - Once given, this action is set (Not registered in useCallback dependencies). Action to dispatch.
+	 * @returns React Callback - A callback which will dispatch the given action. Wrapped in useCallback.
+	 * @example ```
+	 * const clearFilters = useAction({type: "CLEAR_FILTERS"});
+	 * clearFilters();
+	 * ```
+	 */
+	useAction: (action: A) => () => void;
+	/**
+	 * Create a callback which runs the given action creator and dispatches it's action result
+	 * @param actionCreator - Once given, this function is set (Not registered in useCallback dependencies).
+	 * A function which takes any value and returns an action to be dispatched
+	 * @example ```
+	 * const setEmailAddress = useActionCreator<string>(
+	 * 	email => ({type: "SET_EMAIL", email})
+	 * );
+	 * setEmailAddress("emailaddress");
+	 * ```
+	 */
+	useActionCreator: <B = void>(actionCreator: (b: B) => A) => (b: B) => void;
+	StoreContext: React.Context<Store<S, A> | null>;
+};

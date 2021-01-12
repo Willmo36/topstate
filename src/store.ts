@@ -10,6 +10,7 @@ import {
 	ActionHandlers
 } from "./types";
 
+/** @ignore */
 export const makeDefaultLogger = <S, A extends Action>(): Logger<S, A> => ({
 	logStart: (action) => console.group(`action ${action.type}`),
 	logAction: (action) => console.info(`action`, action),
@@ -33,16 +34,8 @@ export function createStore<S, A extends Action>(
 	const isThunk_ = (action: unknown): action is ActionThunk<S, A> =>
 		typeof action === "function";
 
-	/**
-	 * Return the current state value
-	 */
 	const getState: GetState<S> = () => state;
 
-	/**
-	 * Pass the action to the reducers, updating the state
-	 * @param action The action to run the reducers with
-	 * @returns void Fire & Forget
-	 */
 	const dispatch: Dispatcher<S, A> = (action) => {
 		if (isThunk_(action)) {
 			action(getState, dispatch);
@@ -60,11 +53,6 @@ export function createStore<S, A extends Action>(
 		}
 	};
 
-	/**
-	 * Subscribe to the store. The given callback is ran after every dispatch() call.
-	 * @param cb Callback to run after dispatches
-	 * @returns Function to deregister the callback
-	 */
 	const subscribe = (cb: Subscriber<S>) => {
 		subscribers.push(cb);
 		return () => {
@@ -72,11 +60,6 @@ export function createStore<S, A extends Action>(
 		};
 	};
 
-	/**
-	 * Add a reducer to be ran on dispatches
-	 * @param reducer The reducer to be added
-	 * @returns Function to remove the given reducer, no longer running it upon dispatches
-	 */
 	const addReducer = (reducer: Reducer<S, A>) => {
 		reducers.push(reducer);
 		return () => {
@@ -84,12 +67,6 @@ export function createStore<S, A extends Action>(
 		};
 	};
 
-	/**
-	 * Add a reducer to be ran on dispatches updating a property of State rather than the whole object.
-	 * @param key The property of State this reducer is targeting
-	 * @param reducer The reducer to be added
-	 * @returns Function to remove the given reducer
-	 */
 	const addSubReducer = <K extends keyof S>(
 		key: K,
 		reducer: Reducer<S[K], A>
@@ -119,11 +96,14 @@ export function createStore<S, A extends Action>(
 
 /**
  * Create a reducer by specifing reducer-per-action-type
- * @example
+ * @typeParam S State type
+ * @typeParam A Action type
+ * @example ```
  * const myReducer = reducerFromHandlers<MyState, MyAction>({
- *  myAction1: (state, action1) => state,
- *  myAction2: (state, action2) => state,
- * })
+ * 	myAction1: (state, action1) => state,
+ * 	myAction2: (state, action2) => state,
+ * });
+ * ```
  */
 export const reducerFromHandlers = <S, A extends Action>(
 	handlers: ActionHandlers<S, A>
@@ -138,6 +118,7 @@ const identity = <A>(a: A) => a;
 
 /**
  * Noop all logger operations. Useful for testing.
+ * @ignore
  */
 export const createNoopLogger = <S, A extends Action>(): Logger<S, A> => ({
 	logAction: noop,

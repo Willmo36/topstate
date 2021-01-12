@@ -72,9 +72,7 @@
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="store.html#createnooplogger" class="tsd-kind-icon">create<wbr>Noop<wbr>Logger</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="store.html#createstore" class="tsd-kind-icon">create<wbr>Store</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="store.html#makedefaultlogger" class="tsd-kind-icon">make<wbr>Default<wbr>Logger</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="store.html#reducerfromhandlers" class="tsd-kind-icon">reducer<wbr>From<wbr>Handlers</a></li>
 							</ul>
 						</section>
@@ -84,47 +82,16 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-					<a name="createnooplogger" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> create<wbr>Noop<wbr>Logger</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">create<wbr>Noop<wbr>Logger&lt;S, A&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="types.html#logger" class="tsd-signature-type" data-tsd-kind="Type alias">Logger</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/1e85bbc/src/store.ts#L142">store.ts:142</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Noop all logger operations. Useful for testing.</p>
-								</div>
-							</div>
-							<h4 class="tsd-type-parameters-title">Type parameters</h4>
-							<ul class="tsd-type-parameters">
-								<li>
-									<h4>S</h4>
-								</li>
-								<li>
-									<h4>A<span class="tsd-signature-symbol">: </span><a href="types.html#action" class="tsd-signature-type" data-tsd-kind="Type alias">Action</a></h4>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="types.html#logger" class="tsd-signature-type" data-tsd-kind="Type alias">Logger</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 					<a name="createstore" class="tsd-anchor"></a>
 					<h3>create<wbr>Store</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">create<wbr>Store&lt;S, A&gt;<span class="tsd-signature-symbol">(</span>initialState<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">S</span>, logger<span class="tsd-signature-symbol">?: </span><a href="types.html#logger" class="tsd-signature-type" data-tsd-kind="Type alias">Logger</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="types.html#store" class="tsd-signature-type" data-tsd-kind="Type alias">Store</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">create<wbr>Store&lt;S, A&gt;<span class="tsd-signature-symbol">(</span>initialState<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">S</span>, logger<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Logger</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="types.html#store" class="tsd-signature-type" data-tsd-kind="Type alias">Store</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/1e85bbc/src/store.ts#L25">store.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/922956b/src/store.ts#L26">store.ts:26</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -150,39 +117,13 @@
 									</div>
 								</li>
 								<li>
-									<h5>logger: <a href="types.html#logger" class="tsd-signature-type" data-tsd-kind="Type alias">Logger</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></h5>
+									<h5>logger: <span class="tsd-signature-type">Logger</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>The logging implementation (default provided)</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="types.html#store" class="tsd-signature-type" data-tsd-kind="Type alias">Store</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-					<a name="makedefaultlogger" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> make<wbr>Default<wbr>Logger</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">make<wbr>Default<wbr>Logger&lt;S, A&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="types.html#logger" class="tsd-signature-type" data-tsd-kind="Type alias">Logger</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/1e85bbc/src/store.ts#L13">store.ts:13</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-type-parameters-title">Type parameters</h4>
-							<ul class="tsd-type-parameters">
-								<li>
-									<h4>S</h4>
-								</li>
-								<li>
-									<h4>A<span class="tsd-signature-symbol">: </span><a href="types.html#action" class="tsd-signature-type" data-tsd-kind="Type alias">Action</a></h4>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="types.html#logger" class="tsd-signature-type" data-tsd-kind="Type alias">Logger</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -196,7 +137,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/1e85bbc/src/store.ts#L128">store.ts:128</a></li>
+									<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/922956b/src/store.ts#L132">store.ts:132</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -205,10 +146,11 @@
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>example</dt>
-									<dd><p>const myReducer = reducerFromHandlers&lt;MyState, MyAction&gt;({
-											myAction1: (state, action1) =&gt; state,
-											myAction2: (state, action2) =&gt; state,
-										})</p>
+									<dd><pre><code><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">myReducer</span><span style="color: #000000"> = </span><span style="color: #795E26">reducerFromHandlers</span><span style="color: #000000">&lt;</span><span style="color: #267F99">MyState</span><span style="color: #000000">, </span><span style="color: #267F99">MyAction</span><span style="color: #000000">&gt;({</span>
+<span style="color: #000000">    </span><span style="color: #795E26">myAction1</span><span style="color: #001080">:</span><span style="color: #000000"> (</span><span style="color: #001080">state</span><span style="color: #000000">, </span><span style="color: #001080">action1</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">state</span><span style="color: #000000">,</span>
+<span style="color: #000000">    </span><span style="color: #795E26">myAction2</span><span style="color: #001080">:</span><span style="color: #000000"> (</span><span style="color: #001080">state</span><span style="color: #000000">, </span><span style="color: #001080">action2</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">state</span><span style="color: #000000">,</span>
+<span style="color: #000000">});</span>
+</code></pre>
 									</dd>
 								</dl>
 							</div>
@@ -216,9 +158,15 @@
 							<ul class="tsd-type-parameters">
 								<li>
 									<h4>S</h4>
+									<div class="tsd-comment tsd-typography">
+										<p>State type</p>
+									</div>
 								</li>
 								<li>
 									<h4>A<span class="tsd-signature-symbol">: </span><a href="types.html#action" class="tsd-signature-type" data-tsd-kind="Type alias">Action</a></h4>
+									<div class="tsd-comment tsd-typography">
+										<p>Action type</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -259,13 +207,7 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="store.html#createnooplogger" class="tsd-kind-icon">create<wbr>Noop<wbr>Logger</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="store.html#createstore" class="tsd-kind-icon">create<wbr>Store</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="store.html#makedefaultlogger" class="tsd-kind-icon">make<wbr>Default<wbr>Logger</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="store.html#reducerfromhandlers" class="tsd-kind-icon">reducer<wbr>From<wbr>Handlers</a>

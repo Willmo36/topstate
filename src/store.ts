@@ -25,7 +25,7 @@ export const makeDefaultLogger = <S, A extends Action>(): Logger<S, A> => ({
  * Create a Store for the State & Action types
  * @param initialState Initial values of the state
  * @param logger The logging implementation (default provided)
- * @category Primary API
+ * @category Start here 
  */
 export function createStore<S, A extends Action>(
 	initialState: S,

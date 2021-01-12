@@ -10,7 +10,7 @@ import { Action, Store, Selector, StoreReact, UseActionCreator, UseAction, UseSe
 /**
  * Create React Context & Hooks for interacting with the Store
  * Capturing the type parameters so they need not be respecified.
- * @category Primary API
+ * @category Start here
  * @example ```
  * //myProj/src/Store.ts
  * export const {useX, useY, useZ} = createReactBindings<MyState, MyAction>();

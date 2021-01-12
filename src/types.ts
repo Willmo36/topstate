@@ -85,25 +85,42 @@ export type Store<S, A extends Action> = {
 	) => () => void;
 };
 
+/**
+ * Function from S to A
+ */
 export interface Selector<S, A> {
 	(s: S): A;
 }
 
-// extract the result type of the selector
+/**
+ * Return the A of Selector<S, A>
+ * @internal
+ */
 export type SelectorResult<SL> = SL extends (...args: any) => infer A
 	? A
 	: never;
 
-// "map" a collection of selectors to a collection of their results
+/**
+ * Apply SelectorResult to each member of a collection
+ * @internal
+ */
 export type SelectorResults<S> = {
 	[K in keyof S]: SelectorResult<S[K]>;
 };
 
-// Lifts mappable types into Selectors from S
+/**
+ * Lift values into selectors from S
+ * @internal
+ */
 export type LiftToSelector<S, AS> = {
 	[K in keyof AS]: Selector<S, AS[K]>;
 };
 
+/**
+ * Variadic memoize function.
+ * Takes and returns a function, prevserving it's type signature
+ * whilt applying memoization to it.
+ */
 export type Memoize = <Args extends any[], R>(
 	fn: (...args: Args) => R
 ) => (...args: Args) => R;

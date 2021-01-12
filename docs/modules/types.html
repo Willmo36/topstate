@@ -103,7 +103,7 @@
 					<div class="tsd-signature tsd-kind-icon">Action<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/922956b/src/types.ts#L4">types.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/194a4b5/src/types.ts#L4">types.ts:4</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -126,7 +126,7 @@
 					<div class="tsd-signature tsd-kind-icon">Action<wbr>Handlers&lt;S, A&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">A</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">&quot;type&quot;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">, </span><a href="types.html#reducer" class="tsd-signature-type" data-tsd-kind="Type alias">Reducer</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">never</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/922956b/src/types.ts#L15">types.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/194a4b5/src/types.ts#L15">types.ts:15</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -151,7 +151,7 @@
 					<div class="tsd-signature tsd-kind-icon">Action<wbr>Thunk&lt;S, A&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>getState<span class="tsd-signature-symbol">: </span><a href="types.html#getstate" class="tsd-signature-type" data-tsd-kind="Type alias">GetState</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span>, dispatcher<span class="tsd-signature-symbol">: </span><a href="types.html#dispatcher" class="tsd-signature-type" data-tsd-kind="Type alias">Dispatcher</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/922956b/src/types.ts#L43">types.ts:43</a></li>
+							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/194a4b5/src/types.ts#L43">types.ts:43</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -201,13 +201,13 @@
 					<div class="tsd-signature tsd-kind-icon">Dispatcher&lt;S, A&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>action<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol"> | </span><a href="types.html#actionthunk" class="tsd-signature-type" data-tsd-kind="Type alias">ActionThunk</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/922956b/src/types.ts#L34">types.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/194a4b5/src/types.ts#L34">types.ts:34</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<ul>
-								<li>Action - Pass the action to the reducers, updating the state.</li>
+								<li>Action - Pass the action to the reducers, updating the state, triggering the subscribers.</li>
 								<li>ActionThunk - Execute the thunk, passing <a href="types.html#dispatcher">Dispatcher</a> &amp; <a href="types.html#getstate">GetState</a></li>
 							</ul>
 						</div>
@@ -257,7 +257,7 @@
 					<div class="tsd-signature tsd-kind-icon">Get<wbr>State&lt;S&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">S</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/922956b/src/types.ts#L21">types.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/194a4b5/src/types.ts#L21">types.ts:21</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -293,9 +293,18 @@
 					<div class="tsd-signature tsd-kind-icon">Lift<wbr>ToSelector&lt;S, AS&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{</span><span class="tsd-signature-symbol">[ </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol"> in </span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type">AS</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/types.selector.html" class="tsd-signature-type" data-tsd-kind="Interface">Selector</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">AS</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/922956b/src/types.ts#L103">types.ts:103</a></li>
+							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/194a4b5/src/types.ts#L115">types.ts:115</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Lift values into selectors from S</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>internal</dt>
+							<dd></dd>
+						</dl>
+					</div>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
 					<ul class="tsd-type-parameters">
 						<li>
@@ -312,9 +321,16 @@
 					<div class="tsd-signature tsd-kind-icon">Memoize<span class="tsd-signature-symbol">:</span> &lt;Args, R&gt;<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Args</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Args</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/922956b/src/types.ts#L107">types.ts:107</a></li>
+							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/194a4b5/src/types.ts#L124">types.ts:124</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Variadic memoize function.
+								Takes and returns a function, prevserving it&#39;s type signature
+							whilt applying memoization to it.</p>
+						</div>
+					</div>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
@@ -388,7 +404,7 @@
 					<div class="tsd-signature tsd-kind-icon">Reducer&lt;S, A&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">S</span>, action<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">S</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/922956b/src/types.ts#L9">types.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/194a4b5/src/types.ts#L9">types.ts:9</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -436,9 +452,18 @@
 					<div class="tsd-signature tsd-kind-icon">Selector<wbr>Result&lt;SL&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">SL</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">infer </span> A<span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">never</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/922956b/src/types.ts#L93">types.ts:93</a></li>
+							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/194a4b5/src/types.ts#L99">types.ts:99</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Return the A of Selector&lt;S, A&gt;</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>internal</dt>
+							<dd></dd>
+						</dl>
+					</div>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
 					<ul class="tsd-type-parameters">
 						<li>
@@ -452,9 +477,18 @@
 					<div class="tsd-signature tsd-kind-icon">Selector<wbr>Results&lt;S&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{</span><span class="tsd-signature-symbol">[ </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol"> in </span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">: </span><a href="types.html#selectorresult" class="tsd-signature-type" data-tsd-kind="Type alias">SelectorResult</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/922956b/src/types.ts#L98">types.ts:98</a></li>
+							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/194a4b5/src/types.ts#L107">types.ts:107</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Apply SelectorResult to each member of a collection</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>internal</dt>
+							<dd></dd>
+						</dl>
+					</div>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
 					<ul class="tsd-type-parameters">
 						<li>
@@ -468,7 +502,7 @@
 					<div class="tsd-signature tsd-kind-icon">Store&lt;S, A&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>addReducer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>reducer<span class="tsd-signature-symbol">: </span><a href="types.html#reducer" class="tsd-signature-type" data-tsd-kind="Type alias">Reducer</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">; </span>addSubReducer<span class="tsd-signature-symbol">: </span>&lt;K&gt;<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">K</span>, reducer<span class="tsd-signature-symbol">: </span><a href="types.html#reducer" class="tsd-signature-type" data-tsd-kind="Type alias">Reducer</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">; </span>dispatch<span class="tsd-signature-symbol">: </span><a href="types.html#dispatcher" class="tsd-signature-type" data-tsd-kind="Type alias">Dispatcher</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>getState<span class="tsd-signature-symbol">: </span><a href="types.html#getstate" class="tsd-signature-type" data-tsd-kind="Type alias">GetState</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>subscribe<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>cb<span class="tsd-signature-symbol">: </span><a href="types.html#subscriber" class="tsd-signature-type" data-tsd-kind="Type alias">Subscriber</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/922956b/src/types.ts#L61">types.ts:61</a></li>
+							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/194a4b5/src/types.ts#L61">types.ts:61</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -659,7 +693,7 @@
 					<div class="tsd-signature tsd-kind-icon">Subscriber&lt;S&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>s<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/922956b/src/types.ts#L26">types.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/Willmo36/topstate/blob/194a4b5/src/types.ts#L26">types.ts:26</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">

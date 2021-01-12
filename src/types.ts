@@ -95,7 +95,7 @@ export type AddSubReducer<S, A extends Action> = <K extends keyof S>(
 	reducer: Reducer<S[K], A>
 ) => () => void;
 
-/** @category Store API */
+/** @category Primary API */
 export type Store<S, A extends Action> = {
 	getState: GetState<S>;
 	dispatch: Dispatcher<S, A>;
@@ -142,52 +142,68 @@ export type Memoize = <Args extends any[], R>(
 	fn: (...args: Args) => R
 ) => (...args: Args) => R;
 
-/** @category Store API */
+/**
+ * @category React
+ * @returns The Store from the React Context
+ * @example ```
+ * const store = useStore();
+ * ```
+ */
+export type UseStore<S, A extends Action> = () => Store<S, A>;
+/**
+ * @category React
+ * @returns The Store.dispatch from the React Context
+ * @example ```
+ * const dispatch = useDispatch();
+ * dispatch(myAction|myThunk);
+ * ```
+ */
+export type UseDispatch<S, A extends Action> = () => Dispatcher<S, A>;
+
+/**
+ * Subscribe to the Store and run the selector upon state changes
+ * @category React
+ * @param selector - The selector to run
+ * @example ```
+ * const foo = useSelector(fooSelector);
+ * ```
+ */
+export type UseSelector<S> = <A>(selector: Selector<S, A>) => A;
+
+/**
+ * Create a callback to dispatch the given action
+ * @category React
+ * @param action - Once given, this action is set (Not registered in useCallback dependencies). Action to dispatch.
+ * @returns React Callback - A callback which will dispatch the given action. Wrapped in useCallback.
+ * @example ```
+ * const clearFilters = useAction({type: "CLEAR_FILTERS"});
+ * clearFilters();
+ * ```
+ */
+export type UseAction<A extends Action> = (action: A) => () => void;
+
+/**
+ * Create a callback which runs the given action creator and dispatches it's action result
+ * @category React
+ * @param actionCreator - Once given, this function is set (Not registered in useCallback dependencies).
+ * A function which takes any value and returns an action to be dispatched
+ * @example ```
+ * const setEmailAddress = useActionCreator<string>(
+ * 	email => ({type: "SET_EMAIL", email})
+ * );
+ * setEmailAddress("emailaddress");
+ * ```
+ */
+export type UseActionCreator<A extends Action> = <B = void>(
+	actionCreator: (b: B) => A
+) => (b: B) => void;
+
+/** @category Primary API */
 export type StoreReact<S, A extends Action> = {
-	/**
-	 * @returns The Store from the React Context
-	 * @example ```
-	 * const store = useStore();
-	 * ```
-	 */
-	useStore: () => Store<S, A>;
-	/**
-	 * @returns The Store.dispatch from the React Context
-	 * @example ```
-	 * const dispatch = useDispatch();
-	 * dispatch(myAction|myThunk);
-	 * ```
-	 */
-	useDispatch: () => Dispatcher<S, A>;
-	/**
-	 * Subscribe to the Store and run the selector upon state changes
-	 * @param selector - The selector to run
-	 * @example ```
-	 * const foo = useSelector(fooSelector);
-	 * ```
-	 */
-	useSelector: <A>(selector: Selector<S, A>) => A;
-	/**
-	 * Create a callback to dispatch the given action
-	 * @param action - Once given, this action is set (Not registered in useCallback dependencies). Action to dispatch.
-	 * @returns React Callback - A callback which will dispatch the given action. Wrapped in useCallback.
-	 * @example ```
-	 * const clearFilters = useAction({type: "CLEAR_FILTERS"});
-	 * clearFilters();
-	 * ```
-	 */
-	useAction: (action: A) => () => void;
-	/**
-	 * Create a callback which runs the given action creator and dispatches it's action result
-	 * @param actionCreator - Once given, this function is set (Not registered in useCallback dependencies).
-	 * A function which takes any value and returns an action to be dispatched
-	 * @example ```
-	 * const setEmailAddress = useActionCreator<string>(
-	 * 	email => ({type: "SET_EMAIL", email})
-	 * );
-	 * setEmailAddress("emailaddress");
-	 * ```
-	 */
-	useActionCreator: <B = void>(actionCreator: (b: B) => A) => (b: B) => void;
+	useStore: UseStore<S, A>;
+	useDispatch: UseDispatch<S, A>;
+	useSelector: UseSelector<S>;
+	useAction: UseAction<A>;
+	useActionCreator: UseActionCreator<A>;
 	StoreContext: React.Context<Store<S, A> | null>;
 };

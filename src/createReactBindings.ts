@@ -5,7 +5,7 @@ import {
 	useEffect,
 	useCallback
 } from "react";
-import { Action, Store, Selector, StoreReact, UseActionCreator } from "./types";
+import { Action, Store, Selector, StoreReact, UseActionCreator, UseAction, UseSelector, UseDispatch, UseStore } from "./types";
 
 /**
  * Create React Context & Hooks for interacting with the Store
@@ -19,14 +19,14 @@ import { Action, Store, Selector, StoreReact, UseActionCreator } from "./types";
 export function createReactBindings<S, A extends Action>(): StoreReact<S, A> {
 	const StoreContext = createContext<Store<S, A> | null>(null);
 
-	const useStore = () => {
+	const useStore: UseStore<S, A> = () => {
 		const store = useContext(StoreContext);
 		return assertStoreContextValue(store);
 	};
 
-	const useDispatch = () => useStore().dispatch;
+	const useDispatch: UseDispatch<S, A> = () => useStore().dispatch;
 
-	const useSelector = <A>(selector: Selector<S, A>): A => {
+	const useSelector: UseSelector<S> = <A>(selector: Selector<S, A>): A => {
 		const store = useStore();
 		const [result, setResult] = useState(selector(store.getState()));
 		useEffect(() => {
@@ -52,7 +52,7 @@ export function createReactBindings<S, A extends Action>(): StoreReact<S, A> {
 		);
 	};
 
-	const useAction = (action: A) => {
+	const useAction: UseAction<A> = (action) => {
 		const dispatch = useDispatch();
 		return useCallback(() => {
 			dispatch(action);

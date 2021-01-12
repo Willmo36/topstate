@@ -1,13 +1,16 @@
 import {
 	Action,
-	Logger,
-	Subscriber,
+	ActionHandlers,
 	ActionThunk,
-	GetState,
+	AddReducer,
+	AddSubReducer,
 	Dispatcher,
+	GetState,
+	Logger,
 	Reducer,
 	Store,
-	ActionHandlers
+	Subscribe,
+	Subscriber
 } from "./types";
 
 /** @ignore */
@@ -54,21 +57,21 @@ export function createStore<S, A extends Action>(
 		}
 	};
 
-	const subscribe = (cb: Subscriber<S>) => {
+	const subscribe: Subscribe<S> = (cb) => {
 		subscribers.push(cb);
 		return () => {
 			subscribers = subscribers.filter((cb_) => cb_ !== cb);
 		};
 	};
 
-	const addReducer = (reducer: Reducer<S, A>) => {
+	const addReducer: AddReducer<S, A> = (reducer) => {
 		reducers.push(reducer);
 		return () => {
 			reducers = reducers.filter((r) => r !== reducer);
 		};
 	};
 
-	const addSubReducer = <K extends keyof S>(
+	const addSubReducer: AddSubReducer<S, A> = <K extends keyof S>(
 		key: K,
 		reducer: Reducer<S[K], A>
 	) => {

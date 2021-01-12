@@ -28,3 +28,24 @@ export type Store<S, A extends Action> = {
 	addReducer: (reducer: Reducer<S, A>) => () => void;
 	addSubReducer: <K extends keyof S>(key: K, reducer: Reducer<S[K], A>) => () => void;
 };
+
+export interface Selector<S, A> {
+	(s: S): A;
+}
+
+// extract the result type of the selector
+export type SelectorResult<SL> = SL extends (...args: any) => infer A
+	? A
+	: never;
+
+// "map" a collection of selectors to a collection of their results
+export type SelectorResults<S> = {
+	[K in keyof S]: SelectorResult<S[K]>;
+};
+
+// Lifts mappable types into Selectors from S
+export type LiftToSelector<S, AS> = {
+	[K in keyof AS]: Selector<S, AS[K]>;
+};
+
+export type Memoize = <Args extends any[], R>(fn: (...args: Args) => R) => (...args: Args) => R;

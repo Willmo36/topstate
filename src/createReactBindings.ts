@@ -5,8 +5,7 @@ import {
 	useEffect,
 	useCallback
 } from "react";
-import { Selector } from "./selectors";
-import { Action, Store } from "./types";
+import { Action, Store, Selector } from "./types";
 
 /**
  * Create React Context & Hooks for interacting with the Store

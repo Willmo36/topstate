@@ -1,15 +1,19 @@
 import {
 	Action,
-	Logger,
-	Subscriber,
+	ActionHandlers,
 	ActionThunk,
-	GetState,
+	AddReducer,
+	AddSubReducer,
 	Dispatcher,
+	GetState,
+	Logger,
 	Reducer,
 	Store,
-	ActionHandlers
+	Subscribe,
+	Subscriber
 } from "./types";
 
+/** @ignore */
 export const makeDefaultLogger = <S, A extends Action>(): Logger<S, A> => ({
 	logStart: (action) => console.group(`action ${action.type}`),
 	logAction: (action) => console.info(`action`, action),
@@ -17,6 +21,12 @@ export const makeDefaultLogger = <S, A extends Action>(): Logger<S, A> => ({
 	logEnd: () => console.groupEnd()
 });
 
+/**
+ * Create a Store for the State & Action types
+ * @param initialState Initial values of the state
+ * @param logger The logging implementation (default provided)
+ * @category Start here 
+ */
 export function createStore<S, A extends Action>(
 	initialState: S,
 	logger = makeDefaultLogger<S, A>()
@@ -47,21 +57,21 @@ export function createStore<S, A extends Action>(
 		}
 	};
 
-	const subscribe = (cb: Subscriber<S>) => {
+	const subscribe: Subscribe<S> = (cb) => {
 		subscribers.push(cb);
 		return () => {
 			subscribers = subscribers.filter((cb_) => cb_ !== cb);
 		};
 	};
 
-	const addReducer = (reducer: Reducer<S, A>) => {
+	const addReducer: AddReducer<S, A> = (reducer) => {
 		reducers.push(reducer);
 		return () => {
 			reducers = reducers.filter((r) => r !== reducer);
 		};
 	};
 
-	const addSubReducer = <K extends keyof S>(
+	const addSubReducer: AddSubReducer<S, A> = <K extends keyof S>(
 		key: K,
 		reducer: Reducer<S[K], A>
 	) => {
@@ -89,16 +99,20 @@ export function createStore<S, A extends Action>(
 }
 
 /**
- * Create a reducer via the form
- * {
- *  myAction1: (state, action) => state,
- *  myAction2: (state, action) => state,
- * }
+ * Create a reducer by specifing reducer-per-action-type
+ * @category Primary API
+ * @typeParam S State type
+ * @typeParam A Action type
+ * @example ```
+ * const myReducer = reducerFromHandlers<MyState, MyAction>({
+ * 	myAction1: (state, action1) => state,
+ * 	myAction2: (state, action2) => state,
+ * });
+ * ```
  */
 export const reducerFromHandlers = <S, A extends Action>(
 	handlers: ActionHandlers<S, A>
 ): Reducer<S, A> => (state, action) => {
-	// @ts-ignore
 	const handler: Reducer<S, A> = handlers[action.type] ?? identity;
 	return handler(state, action);
 };
@@ -109,6 +123,7 @@ const identity = <A>(a: A) => a;
 
 /**
  * Noop all logger operations. Useful for testing.
+ * @ignore
  */
 export const createNoopLogger = <S, A extends Action>(): Logger<S, A> => ({
 	logAction: noop,

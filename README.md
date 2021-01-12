@@ -1,10 +1,20 @@
-# TopState
 
-### v0.1 WIP
+# Library goal
 
-Fully Typed - Redux + Thunks + Reselect + Logging + React bindings
+Fully typed, maximally inferred flux implementation with a useful feature set. 
 
-## The What
+## What does this mean?
+
+A flux implementation is often the backbone of an application with a whitelist of events that can effect state. At the core of this is the dispatcher and the reducers. Neither of these pieces should have any **type ambiguity**. The dispatcher should **prevent** us from dispatching incorrect payload shapes and the reducers should not accept `any` as the type of the payload. In addition to this, we try to minimize the number of type parameters needed in order to achieve this.
+
+For example:
+
+- No `useDispatch<Action>`. None of the hooks require `State` or `Action` as they already know.
+- No `payload: any` in reducers. The payload is inferred based on action.
+
+---
+
+## Features
 
 `TopState` is a library aimed at replicating Redux with common utilities all as one package whilst maintaining full typings across the feature set.
 
@@ -13,36 +23,11 @@ Fully Typed - Redux + Thunks + Reselect + Logging + React bindings
 - `reselect` - Memoized selectors
 - `redux-logger` - Logging just like original library
 - `react-redux` - `useDispatch`, `useSelector`
+- `redux-actions` - `useAction` , `useActionCreator`, `reducerFromHandlers`
 
-## The Why
+---
 
-### TypeScript first
-
-The first and foremost requirement across the feature set is everything being correctly typed with as much (useful) inference as possible. A prime example is `dispatch`. The whole flux flow is defined by the `State` object and a union of `Action`s which signal changes to that state object. `Action` is a very important type to this concept and should carried through the API surface. For example, `useDispatch` will automatically be constrained to your `Action` type, no need to respecify at the call site and as such, you cannot dispatch incorrect actions.
-
-### Thunks
-
-It's pretty easy to require async action functionality, so it's baked in. By baking this in, we can ensure `Action` and `getState` are automatically typed from the definition of your `store`.
-
-Another note though, a dedicated "channel" for side effects is very effective for navigating and understanding how, where and why your application has certain effects (as opposed to effects happening at any depth of the component tree).
-
-### Selectors
-
-Computed values, values which are derived from `State`, are very useful to avoid duplication and overlap in your primary `State` model. 
-
-Memoizing at the definition, rather than the usage (by using `React.useMemo`), further enabling expensive computed values. 
-
-Enables Tree skipping. Some application architectures may result in frequent updates deep down in the component tree. Prop drilling is not only verbose but requires the whole tree to recalculate. `useSelector` subscribes directly to the `store`, giving you the option to skip the parent components in the tree if you deem necessary.
-
-### Logger
-
-As mentioned in the Thunks paragraph, a dedicated channel for side effects can be very useful to organize and visualize your application. `redux-logger` showed how useful it is to simply see this information in the console and thus we bundle similar functionality. 
-
-### React
-
-As is the theme, ensuring React bindings are already typed based on your `store`. `useDispatch` already knows your `Action`s, `useSelector` already knows your `State`.
-
-## The Getting Started
+## Example
 
 ```tsx
 import * as React from "react";
@@ -67,7 +52,6 @@ type Action = typeof inc | typeof dec;
  * Notice we also pass the Action union type, locking it in
  */
 let store = createStore<State, Action>({ count: 0 });
-
 
 /**
  * reducerFromHandlers is a helper function to create reducers
@@ -95,7 +79,7 @@ const removeReducer = store.addReducer(reducer);
  * Now all React usages already know of State & Action
  */
 const {
-  useDispatch,
+  useAction,
   useSelector,
   useStore,
   StoreContext,
@@ -108,11 +92,13 @@ const App: React.FC = () => {
 
   // dispatch is typed with Action too, ensuring we can't dispatch incorrect actions or payloads
   const dispatch = useDispatch();
-  const inc = () => dispatch({ type: "inc" });
-  const dec = () => dispatch({ type: "dec" });
+  const inc = React.useCallback(() => dispatch({ type: "inc" }), [dispatch]);
+  // helper for static dispatches
+  const dec = useAction({type: "dec" });
 
   // We cannot do this
   // const not_an_action = () => dispatch({ type: "not_an_action" });
+  // const not_an_action = useAction({ type: "not_an_action" });
 
   return (
     <div>
@@ -132,7 +118,9 @@ render(
   </StoreContext.Provider>,
   document.getElementById("app")
 );
+
 ```
 
 # Licence
+
 The MIT License (MIT)

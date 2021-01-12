@@ -180,7 +180,7 @@ export type UseSelector<S> = <A>(selector: Selector<S, A>) => A;
  * clearFilters();
  * ```
  */
-export type UseAction<A extends Action> = (action: A) => () => void;
+export type UseAction<S, A extends Action> = (action: A | ActionThunk<S, A>) => () => void;
 
 /**
  * Create a callback which runs the given action creator and dispatches it's action result
@@ -203,7 +203,7 @@ export type StoreReact<S, A extends Action> = {
 	useStore: UseStore<S, A>;
 	useDispatch: UseDispatch<S, A>;
 	useSelector: UseSelector<S>;
-	useAction: UseAction<A>;
+	useAction: UseAction<S, A>;
 	useActionCreator: UseActionCreator<A>;
 	StoreContext: React.Context<Store<S, A> | null>;
 };

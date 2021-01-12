@@ -52,7 +52,7 @@ export function createReactBindings<S, A extends Action>(): StoreReact<S, A> {
 		);
 	};
 
-	const useAction: UseAction<A> = (action) => {
+	const useAction: UseAction<S, A> = (action) => {
 		const dispatch = useDispatch();
 		return useCallback(() => {
 			dispatch(action);

@@ -2,8 +2,7 @@ import { act, renderHook } from "@testing-library/react-hooks";
 import * as React from "react";
 import { createNoopLogger, createStore } from "../store";
 import { createReactBindings } from "../createReactBindings";
-import { Selector } from "../selectors";
-import { ActionThunk } from "../types";
+import { ActionThunk, Selector } from "../types";
 
 type TestAction = { type: "inc" };
 type TestState = {
@@ -99,11 +98,11 @@ describe("react", () => {
 				dispatcher({ type: "inc"});
 				expect(getState().foo).toBe(expected2);
 			};
-			const { result } = renderHook(() => useAction({ type: "inc" }), {
+			const { result } = renderHook(() => useAction(thunk), {
 				wrapper
 			});
 			result.current();
-			expect(store.getState().foo).toEqual(expected1);
+			expect(store.getState().foo).toEqual(expected2);
 
 		});
 	});

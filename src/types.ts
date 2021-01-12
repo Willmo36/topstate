@@ -1,12 +1,12 @@
 /**
  * The base type for a tagged union via the `type` property.
- * @category Inferred 
+ * @category Inferred
  */
 export type Action = { type: string };
 
 /**
  * Classical reducer. Takes state & an action returs a new state.
- * @category Inferred 
+ * @category Inferred
  */
 export type Reducer<S, A extends Action> = (state: S, action: A) => S;
 
@@ -60,43 +60,54 @@ export type Logger<S, A extends Action> = {
 };
 
 /**
+ * Subscribe to the store. The given callback is ran after every dispatch() call.
+ * @category Store API
+ * @param cb Callback to run after dispatches
+ * @returns Function to deregister the callback
+ */
+export type Subscribe<S> = (cb: Subscriber<S>) => () => void;
+
+/**
+ * Add a reducer to be ran on dispatches
+ * @category Store API
+ * @param reducer The reducer to be added
+ * @returns Function to remove the given reducer, no longer running it upon dispatches
+ */
+export type AddReducer<S, A extends Action> = (
+	reducer: Reducer<S, A>
+) => () => void;
+
+/**
  * The core data type, Store.
  * @category Store API
  * @returns Functions for interacting with the store.
  * See documentation for more info on each of them.
  */
+/**
+ * Add a reducer to be ran on dispatches updating a property of State rather than the whole object.
+ * @category Store API
+ * @param key The property of State this reducer is targeting
+ * @param reducer The reducer to be added
+ * @returns Function to remove the given reducer
+ */
+export type AddSubReducer<S, A extends Action> = <K extends keyof S>(
+	key: K,
+	reducer: Reducer<S[K], A>
+) => () => void;
+
+/** @category Store API */
 export type Store<S, A extends Action> = {
 	getState: GetState<S>;
 	dispatch: Dispatcher<S, A>;
-	/**
-	 * Subscribe to the store. The given callback is ran after every dispatch() call.
-	 * @category Store API
-	 * @param cb Callback to run after dispatches
-	 * @returns Function to deregister the callback
-	 */
-	subscribe: (cb: Subscriber<S>) => () => void;
-	/**
-	 * Add a reducer to be ran on dispatches
-	 * @param reducer The reducer to be added
-	 * @returns Function to remove the given reducer, no longer running it upon dispatches
-	 */
-	addReducer: (reducer: Reducer<S, A>) => () => void;
-	/**
-	 * Add a reducer to be ran on dispatches updating a property of State rather than the whole object.
-	 * @param key The property of State this reducer is targeting
-	 * @param reducer The reducer to be added
-	 * @returns Function to remove the given reducer
-	 */
-	addSubReducer: <K extends keyof S>(
-		key: K,
-		reducer: Reducer<S[K], A>
-	) => () => void;
+	subscribe: Subscribe<S>;
+	addReducer: AddReducer<S, A>;
+	addSubReducer: AddSubReducer<S, A>;
 };
 
 /**
  * Function from S to A
  */
-export type Selector<S, A>  = (s: S) => A;
+export type Selector<S, A> = (s: S) => A;
 
 /**
  * Return the A of Selector<S, A>

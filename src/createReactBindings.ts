@@ -5,7 +5,22 @@ import {
 	useEffect,
 	useCallback
 } from "react";
-import { Action, Store, Selector, StoreReact, UseActionCreator, UseAction, UseSelector, UseDispatch, UseStore } from "./types";
+import {
+	Action,
+	Store,
+	Selector,
+	StoreReact,
+	UseActionCreator,
+	UseAction,
+	UseSelector,
+	UseDispatch,
+	UseStore,
+	LiftToSelector,
+	SelectorResults,
+	SelectorResult,
+	LiftToSelector2,
+	UseSelectors
+} from "./types";
 
 /**
  * Create React Context & Hooks for interacting with the Store
@@ -42,7 +57,30 @@ export function createReactBindings<S, A extends Action>(): StoreReact<S, A> {
 		return result;
 	};
 
-	const useActionCreator: UseActionCreator<A> = <B = void>(actionCreator: (b: B) => A) => {
+	const useSelectors: UseSelectors<S> = <AN extends any[]>(
+		...selectors: LiftToSelector<S, AN>
+	): AN => {
+		const store = useStore();
+
+		const [result, setResult] = useState(
+			selectors.map((selector) => selector(store.getState()))
+		);
+		useEffect(() => {
+			const unsubscribe = store.subscribe((state) => {
+				setResult(selectors.map((selector) => selector(state)));
+			});
+
+			return () => {
+				unsubscribe();
+			};
+		}, [store]);
+
+		return result as AN;
+	};
+
+	const useActionCreator: UseActionCreator<A> = <B = void>(
+		actionCreator: (b: B) => A
+	) => {
 		const dispatch = useDispatch();
 		return useCallback(
 			(b: B) => {
@@ -63,6 +101,7 @@ export function createReactBindings<S, A extends Action>(): StoreReact<S, A> {
 		useStore,
 		useDispatch,
 		useSelector,
+		useSelectors,
 		useAction,
 		useActionCreator,
 		StoreContext

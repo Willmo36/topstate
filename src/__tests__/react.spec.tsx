@@ -3,6 +3,7 @@ import * as React from "react";
 import { createNoopLogger, createStore } from "../store";
 import { createReactBindings } from "../createReactBindings";
 import { ActionThunk, Selector } from "../types";
+import { createSelector } from "../selectors";
 
 type TestAction = { type: "inc" };
 type TestState = {
@@ -13,6 +14,7 @@ const {
 	StoreContext,
 	useDispatch,
 	useSelector,
+	useSelectors,
 	useStore,
 	useAction,
 	useActionCreator
@@ -79,6 +81,53 @@ describe("react", () => {
 		// todo add case ensuring component does NOT rerender upon a selector resulting in same value
 	});
 
+	describe.only("useSelectors", () => {
+		const s1: Selector<TestState, 1> = () => 1;
+		const s2: Selector<TestState, 2> = () => 2;
+		const fooSelector: Selector<TestState, number> = (s) => s.foo;
+
+		it("should consume the selectors", () => {
+			const { result } = renderHook(() => useSelectors(s1, s2), { wrapper });
+			expect(result.current).toEqual([1, 2]);
+		});
+
+		it("should rerender upon any selector result changing", () => {
+			const initialFoo = store.getState().foo;
+			const nextFoo = initialFoo + 1;
+			const { result } = renderHook(() => useSelectors(fooSelector, s1, s2), {
+				wrapper
+			});
+			expect(result.current).toEqual([initialFoo, 1, 2]);
+
+			act(() => {
+				store.dispatch({ type: "inc" });
+			});
+
+			expect(result.current).toEqual([nextFoo, 1, 2]);
+		});
+
+		it("should not rerender upon no select result change", () => {
+			const v1 = {};
+			const v2 = {};
+			const s1 = createSelector<TestState, {}>(() => v1);
+			const s2 = createSelector<TestState, {}>(() => v2);
+			const { result } = renderHook(() => useSelectors(s1, s2), {
+				wrapper
+			});
+			const [r1a, r1b] = result.current;
+			expect(r1a).toBe(v1);
+			expect(r1b).toBe(v2);
+
+			act(() => {
+				store.dispatch({ type: "inc" });
+			});
+
+			const [r2a, r2b] = result.current;
+			expect(r2a).toBe(v1);
+			expect(r2b).toBe(v2);
+		});
+	});
+
 	describe("useAction", () => {
 		it("should provide a callback thunk to dispatch the action", () => {
 			const expected = store.getState().foo + 1;
@@ -92,10 +141,13 @@ describe("react", () => {
 		it("should provide a callback to execute the actionthunk", () => {
 			const expected1 = store.getState().foo + 1;
 			const expected2 = store.getState().foo + 2;
-			const thunk: ActionThunk<TestState, TestAction> = (getState, dispatcher) => {
-				dispatcher({ type: "inc"});
+			const thunk: ActionThunk<TestState, TestAction> = (
+				getState,
+				dispatcher
+			) => {
+				dispatcher({ type: "inc" });
 				expect(getState().foo).toBe(expected1);
-				dispatcher({ type: "inc"});
+				dispatcher({ type: "inc" });
 				expect(getState().foo).toBe(expected2);
 			};
 			const { result } = renderHook(() => useAction(thunk), {
@@ -103,7 +155,6 @@ describe("react", () => {
 			});
 			result.current();
 			expect(store.getState().foo).toEqual(expected2);
-
 		});
 	});
 
@@ -118,4 +169,4 @@ describe("react", () => {
 			expect(store.getState().foo).toEqual(expected);
 		});
 	});
-})
+});

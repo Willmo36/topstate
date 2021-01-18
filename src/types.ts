@@ -132,6 +132,7 @@ export type SelectorResults<S> = {
 export type LiftToSelector<S, AS> = {
 	[K in keyof AS]: Selector<S, AS[K]>;
 };
+export type LiftToSelector2<S, AS> = AS extends any ? Selector<S, AS> : never;
 
 /**
  * Variadic memoize function.
@@ -171,6 +172,17 @@ export type UseDispatch<S, A extends Action> = () => Dispatcher<S, A>;
 export type UseSelector<S> = <A>(selector: Selector<S, A>) => A;
 
 /**
+ * Subscribe to the Store and run each selector upon state changes
+ * More efficient than using multiple useSelector() calls.
+ * @category React
+ * @param selectors - The selectors to run
+ * @example ```
+ * const [foo, bar] = useSelectors(selectFoo, selectBar);
+ * ```
+ */
+export type UseSelectors<S> = <AN extends any[]>(...selectors: LiftToSelector<S, AN>) => AN;
+
+/**
  * Create a callback to dispatch the given action
  * @category React
  * @param action - Once given, this action is set (Not registered in useCallback dependencies). Action to dispatch.
@@ -203,6 +215,7 @@ export type StoreReact<S, A extends Action> = {
 	useStore: UseStore<S, A>;
 	useDispatch: UseDispatch<S, A>;
 	useSelector: UseSelector<S>;
+	useSelectors: UseSelectors<S>;
 	useAction: UseAction<S, A>;
 	useActionCreator: UseActionCreator<A>;
 	StoreContext: React.Context<Store<S, A> | null>;

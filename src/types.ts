@@ -180,7 +180,9 @@ export type UseSelector<S> = <A>(selector: Selector<S, A>) => A;
  * const [foo, bar] = useSelectors(selectFoo, selectBar);
  * ```
  */
-export type UseSelectors<S> = <AN extends any[]>(...selectors: LiftToSelector<S, AN>) => AN;
+export type UseSelectors<S> = <AN extends any[]>(
+	...selectors: LiftToSelector<S, AN>
+) => AN;
 
 /**
  * Create a callback to dispatch the given action
@@ -192,7 +194,10 @@ export type UseSelectors<S> = <AN extends any[]>(...selectors: LiftToSelector<S,
  * clearFilters();
  * ```
  */
-export type UseAction<S, A extends Action> = (action: A | ActionThunk<S, A>) => () => void;
+export type UseAction<S, A extends Action> = (
+	action: A | ActionThunk<S, A>,
+	deps?: unknown[]
+) => () => void;
 
 /**
  * Create a callback which runs the given action creator and dispatches it's action result
@@ -207,7 +212,8 @@ export type UseAction<S, A extends Action> = (action: A | ActionThunk<S, A>) => 
  * ```
  */
 export type UseActionCreator<A extends Action> = <B = void>(
-	actionCreator: (b: B) => A
+	actionCreator: (b: B) => A,
+	deps?: unknown[]
 ) => (b: B) => void;
 
 /** @category Primary API */

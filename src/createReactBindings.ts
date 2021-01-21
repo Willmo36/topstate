@@ -79,22 +79,23 @@ export function createReactBindings<S, A extends Action>(): StoreReact<S, A> {
 	};
 
 	const useActionCreator: UseActionCreator<A> = <B = void>(
-		actionCreator: (b: B) => A
+		actionCreator: (b: B) => A,
+		deps: unknown[] = []
 	) => {
 		const dispatch = useDispatch();
 		return useCallback(
 			(b: B) => {
 				dispatch(actionCreator(b));
 			},
-			[dispatch]
+			[dispatch, ...deps]
 		);
 	};
 
-	const useAction: UseAction<S, A> = (action) => {
+	const useAction: UseAction<S, A> = (action, deps: unknown[] = []) => {
 		const dispatch = useDispatch();
 		return useCallback(() => {
 			dispatch(action);
-		}, [dispatch]);
+		}, [dispatch, ...deps]);
 	};
 
 	return {

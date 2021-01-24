@@ -15,7 +15,7 @@ import {
 
 /** @ignore */
 export const makeDefaultLogger = <S, A extends Action>(): Logger<S, A> => ({
-	logStart: (action) => console.group(`action ${action.type}`),
+	logStart: (action) => console.groupCollapsed(`action ${action.type}`),
 	logAction: (action) => console.info(`action`, action),
 	logState: (state, stage) => console.info(`${stage} state`, state),
 	logEnd: () => console.groupEnd()

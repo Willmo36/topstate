@@ -195,7 +195,8 @@ export type UseAction<S, A extends Action> = (action: A | ActionThunk<S, A>) => 
  * ```
  */
 export type UseActionCreator<A extends Action> = <B = void>(
-	actionCreator: (b: B) => A
+	actionCreator: (b: B) => A,
+	additionalDeps?: any[]
 ) => (b: B) => void;
 
 /** @category Primary API */

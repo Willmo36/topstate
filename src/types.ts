@@ -28,7 +28,7 @@ export type GetState<S> = () => S;
  * Callback to be ran upon state changes
  * @ignore
  */
-export type Subscriber<S> = (s: S) => void;
+export type Subscriber<S, A extends Action> = (s: S, a: Action) => void;
 
 /**
  * - Action - Pass the action to the reducers, updating the state, triggering the subscribers.

@@ -100,17 +100,19 @@ describe("store", () => {
 			const unsub2 = store.subscribe(sub2);
 
 			store.dispatch({ type: "inc" });
-			const expected1: State = { foo: 1 };
-			expect(sub1).toHaveBeenCalledWith(expected1);
-			expect(sub2).toHaveBeenCalledWith(expected1);
+			const expected1Arg1: State = { foo: 1 };
+			const expected1Arg2: Inc = { type: "inc" };
+			expect(sub1).toHaveBeenCalledWith(expected1Arg1, expected1Arg2);
+			expect(sub2).toHaveBeenCalledWith(expected1Arg1, expected1Arg2);
 
 			sub1.mockReset();
 			sub2.mockReset();
 			unsub1();
 			store.dispatch({ type: "inc" });
-			const expected2: State = { foo: 2 };
+			const expected2Arg1: State = { foo: 2 };
+			const expected2Arg2: Inc = { type: "inc" };
 			expect(sub1).not.toHaveBeenCalled();
-			expect(sub2).toHaveBeenCalledWith(expected2);
+			expect(sub2).toHaveBeenCalledWith(expected2Arg1, expected2Arg2);
 
 			sub1.mockReset();
 			sub2.mockReset();

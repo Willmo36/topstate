@@ -1,3 +1,5 @@
+import React from "react";
+
 /**
  * The base type for a tagged union via the `type` property.
  * @category Inferred
@@ -28,7 +30,7 @@ export type GetState<S> = () => S;
  * Callback to be ran upon state changes
  * @ignore
  */
-export type Subscriber<S, A extends Action> = (s: S, a: Action) => void;
+export type Subscriber<S> = (s: S, a: Action) => void;
 
 /**
  * - Action - Pass the action to the reducers, updating the state, triggering the subscribers.
@@ -199,6 +201,22 @@ export type UseActionCreator<A extends Action> = <B = void>(
 	additionalDeps?: any[]
 ) => (b: B) => void;
 
+export type Query = {tag: string, result: any};
+export type QueryResponder<Q extends Query> = (query: Omit<Q, 'result'>) => Q['result'];
+
+// Distribute over the Query union to ensure the CB is typed based on the tag
+export type RegisterQueryResponderArgs<Q extends Query> = Q extends any
+? [Q['tag'], QueryResponder<Q>]
+: [never]
+// export type RegisterQueryResponder<Q extends Query> = (...args: RegisterQueryResponderArgs<Q>) => () => void;
+export type RegisterQueryResponder<Q extends Query> = (args: RegisterQueryResponderArgs<Q>[0], args2: RegisterQueryResponderArgs<Q>[1]) => () => void;
+
+export type RunQuery<Q extends Query> = (query: Omit<Q, 'result'>) => Array<Q['result']>;
+export type Inquirier<Q extends Query> = {
+	register: RegisterQueryResponder<Q>;
+	query: RunQuery<Q>;
+}
+
 /** @category Primary API */
 export type StoreReact<S, A extends Action> = {
 	useStore: UseStore<S, A>;
@@ -208,3 +226,9 @@ export type StoreReact<S, A extends Action> = {
 	useActionCreator: UseActionCreator<A>;
 	StoreContext: React.Context<Store<S, A> | null>;
 };
+
+export type InquirerReact<Q extends Query> = {
+	QueryContext: React.Context<Inquirier<Q> | null>;
+	useInquirierResponder: (tag: RegisterQueryResponderArgs<Q>[0], cb: RegisterQueryResponderArgs<Q>[1], additionalDeps: any[]) => void;
+	useInquirierEmitter: () => RunQuery<Q>;
+}

@@ -32,7 +32,7 @@ export function createStore<S, A extends Action>(
 	logger = makeDefaultLogger<S, A>()
 ): Store<S, A> {
 	let state = initialState;
-	let subscribers: Subscriber<S>[] = [];
+	let subscribers: Subscriber<S, A>[] = [];
 	let reducers: Reducer<S, A>[] = [];
 
 	const isThunk_ = (action: unknown): action is ActionThunk<S, A> =>
@@ -53,11 +53,11 @@ export function createStore<S, A extends Action>(
 			);
 			logger.logState(state, "next");
 			logger.logEnd();
-			subscribers.forEach((notify) => notify(state));
+			subscribers.forEach((notify) => notify(state, action));
 		}
 	};
 
-	const subscribe: Subscribe<S> = (cb) => {
+	const subscribe: Subscribe<S, A> = (cb) => {
 		subscribers.push(cb);
 		return () => {
 			subscribers = subscribers.filter((cb_) => cb_ !== cb);

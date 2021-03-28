@@ -1,3 +1,5 @@
+import React from "react";
+
 /**
  * The base type for a tagged union via the `type` property.
  * @category Inferred
@@ -28,7 +30,7 @@ export type GetState<S> = () => S;
  * Callback to be ran upon state changes
  * @ignore
  */
-export type Subscriber<S> = (s: S) => void;
+export type Subscriber<S, A extends Action> = (s: S, a: A) => void;
 
 /**
  * - Action - Pass the action to the reducers, updating the state, triggering the subscribers.
@@ -65,7 +67,7 @@ export type Logger<S, A extends Action> = {
  * @param cb Callback to run after dispatches
  * @returns Function to deregister the callback
  */
-export type Subscribe<S> = (cb: Subscriber<S>) => () => void;
+export type Subscribe<S, A extends Action> = (cb: Subscriber<S, A>) => () => void;
 
 /**
  * Add a reducer to be ran on dispatches
@@ -99,7 +101,7 @@ export type AddSubReducer<S, A extends Action> = <K extends keyof S>(
 export type Store<S, A extends Action> = {
 	getState: GetState<S>;
 	dispatch: Dispatcher<S, A>;
-	subscribe: Subscribe<S>;
+	subscribe: Subscribe<S, A>;
 	addReducer: AddReducer<S, A>;
 	addSubReducer: AddSubReducer<S, A>;
 };
@@ -208,3 +210,49 @@ export type StoreReact<S, A extends Action> = {
 	useActionCreator: UseActionCreator<A>;
 	StoreContext: React.Context<Store<S, A> | null>;
 };
+
+/**
+ * Base shape for Queries
+ * @category Query API
+ */
+export type Query = {tag: string, result: any};
+
+/**
+ * @ignore
+ */
+export type RegisterQueryResponderArgs<Q extends Query> = Q extends any
+? [Q['tag'], RunQuery<Q>]
+: [never]
+
+/**
+ * Register a handler for a specific query
+ * @category Query API
+ */
+export type RegisterQueryResponder<Q extends Query> = (args: RegisterQueryResponderArgs<Q>[0], args2: RegisterQueryResponderArgs<Q>[1]) => () => void;
+
+/**
+ * Execute a query with 0+ results
+ * @param query - One of your queries minus the .result prop
+ * @returns results - 0+ results typed to query.result
+ * @category Query API
+ */
+export type RunQuery<Q extends Query> = (query: Omit<Q, 'result'>) => Array<Q['result']>;
+
+/**
+ * Collection type for querying and responding
+ * @category Query API
+ */
+export type Inquirier<Q extends Query> = {
+	register: RegisterQueryResponder<Q>;
+	query: RunQuery<Q>;
+}
+
+/**
+ * Inquirer functionality exposed via hooks
+ * @category Query API
+ */
+export type InquirerReact<Q extends Query> = {
+	QueryContext: React.Context<Inquirier<Q> | null>;
+	useInquirierResponder: (tag: RegisterQueryResponderArgs<Q>[0], cb: RegisterQueryResponderArgs<Q>[1], additionalDeps: any[]) => void;
+	useInquirierEmitter: () => RunQuery<Q>;
+}

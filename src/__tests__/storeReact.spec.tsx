@@ -1,8 +1,8 @@
 import { act, renderHook } from "@testing-library/react-hooks";
 import * as React from "react";
 import { createNoopLogger, createStore } from "../store";
-import { createReactBindings } from "../createReactBindings";
 import { ActionThunk, Selector } from "../types";
+import { createStoreHooks } from '../storeReact';
 
 type TestAction = { type: "inc" };
 type TestState = {
@@ -16,7 +16,7 @@ const {
 	useStore,
 	useAction,
 	useActionCreator
-} = createReactBindings<TestState, TestAction>();
+} = createStoreHooks<TestState, TestAction>();
 
 const initialState: TestState = { foo: 0 };
 const store = createStore<TestState, TestAction>(
@@ -36,7 +36,7 @@ const wrapper = ({ children }: { children: React.ReactChildren }) => (
 	<StoreContext.Provider value={store}>{children}</StoreContext.Provider>
 );
 
-describe("react", () => {
+describe("createStoreHooks", () => {
 	describe("useStore", () => {
 		it("should provide the store", () => {
 			const { result } = renderHook(() => useStore(), { wrapper });

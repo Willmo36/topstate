@@ -1,7 +1,7 @@
-import { Inquirier, Query, QueryResponder, RegisterQueryResponder, RunQuery } from "./types";
+import { Inquirier, Query, RegisterQueryResponder, RunQuery } from "./types";
 
 export function createQueries<Q extends Query>(): Inquirier<Q>{
-    const responders: Record<string, Array<QueryResponder<Q>>>= {};
+    const responders: Record<string, Array<RunQuery<Q>>>= {};
 
     const register: RegisterQueryResponder<Q> = (tag, cb) => {
         const qt = tag as Q['tag'];

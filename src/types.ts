@@ -30,7 +30,7 @@ export type GetState<S> = () => S;
  * Callback to be ran upon state changes
  * @ignore
  */
-export type Subscriber<S> = (s: S, a: Action) => void;
+export type Subscriber<S, A extends Action> = (s: S, a: A) => void;
 
 /**
  * - Action - Pass the action to the reducers, updating the state, triggering the subscribers.
@@ -67,7 +67,7 @@ export type Logger<S, A extends Action> = {
  * @param cb Callback to run after dispatches
  * @returns Function to deregister the callback
  */
-export type Subscribe<S> = (cb: Subscriber<S>) => () => void;
+export type Subscribe<S, A extends Action> = (cb: Subscriber<S, A>) => () => void;
 
 /**
  * Add a reducer to be ran on dispatches
@@ -101,7 +101,7 @@ export type AddSubReducer<S, A extends Action> = <K extends keyof S>(
 export type Store<S, A extends Action> = {
 	getState: GetState<S>;
 	dispatch: Dispatcher<S, A>;
-	subscribe: Subscribe<S>;
+	subscribe: Subscribe<S, A>;
 	addReducer: AddReducer<S, A>;
 	addSubReducer: AddSubReducer<S, A>;
 };

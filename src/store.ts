@@ -57,7 +57,7 @@ export function createStore<S, A extends Action>(
 		}
 	};
 
-	const subscribe: Subscribe<S> = (cb) => {
+	const subscribe: Subscribe<S, A> = (cb) => {
 		subscribers.push(cb);
 		return () => {
 			subscribers = subscribers.filter((cb_) => cb_ !== cb);

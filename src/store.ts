@@ -10,7 +10,7 @@ import {
   Reducer,
   Store,
   Subscribe,
-  Subscriber
+  Subscriber,
 } from "./types";
 
 /** @ignore */
@@ -18,7 +18,7 @@ export const makeDefaultLogger = <S, A extends Action>(): Logger<S, A> => ({
   logStart: (action) => console.group(`action ${action.type}`),
   logAction: (action) => console.info(`action`, action),
   logState: (state, stage) => console.info(`${stage} state`, state),
-  logEnd: () => console.groupEnd()
+  logEnd: () => console.groupEnd(),
 });
 
 /**
@@ -94,7 +94,7 @@ export function createStore<S, A extends Action>(
     dispatch,
     subscribe,
     addReducer,
-    addSubReducer
+    addSubReducer,
   };
 }
 
@@ -129,5 +129,5 @@ export const createNoopLogger = <S, A extends Action>(): Logger<S, A> => ({
   logAction: noop,
   logEnd: noop,
   logStart: noop,
-  logState: noop
+  logState: noop,
 });

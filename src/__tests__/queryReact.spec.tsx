@@ -9,7 +9,7 @@ describe("createInquirerHooks", () => {
   const {
     useInquirierEmitter,
     useInquirierResponder,
-    QueryContext
+    QueryContext,
   } = createInquirierHooks<TestQuery>();
   const wrapper = ({ children }: { children: React.ReactChildren }) => (
     <QueryContext.Provider value={inquierer}>{children}</QueryContext.Provider>

@@ -17,7 +17,7 @@ export const createInquirierHooks = <Q extends Query>(): InquirerReact<Q> => {
       return React.useEffect(() => {
         return inquirier.register(tag, cb);
       }, additionalDeps);
-    }
+    },
   };
 
   return hooks;

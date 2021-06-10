@@ -71,9 +71,11 @@ export const createCompoundSelector = <
 	selectors: [Selector<S, A1>, ...LiftToSelector<S, AN>],
 	fn: (...selectorResults: SelectorResults<typeof selectors>) => B,
 	memoize: Memoize = memoizeLastResult
-): Selector<S, B> =>
-	memoize((state) => {
+): Selector<S, B> => {
+	const memFn = memoize(fn);
+	return memoize((state) => {
 		const selections = selectors.map((sl) => sl(state));
 		// @ts-ignore
-		return fn(...selections);
+		return memFn(...selections);
 	});
+};

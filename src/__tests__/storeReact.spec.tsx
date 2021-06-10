@@ -2,7 +2,7 @@ import { act, renderHook } from "@testing-library/react-hooks";
 import * as React from "react";
 import { createNoopLogger, createStore } from "../store";
 import { ActionThunk, Selector } from "../types";
-import { createStoreHooks } from '../storeReact';
+import { createStoreHooks } from "../storeReact";
 
 type TestAction = { type: "inc" };
 type TestState = {
@@ -92,10 +92,13 @@ describe("createStoreHooks", () => {
 		it("should provide a callback to execute the actionthunk", () => {
 			const expected1 = store.getState().foo + 1;
 			const expected2 = store.getState().foo + 2;
-			const thunk: ActionThunk<TestState, TestAction> = (getState, dispatcher) => {
-				dispatcher({ type: "inc"});
+			const thunk: ActionThunk<TestState, TestAction> = (
+				getState,
+				dispatcher
+			) => {
+				dispatcher({ type: "inc" });
 				expect(getState().foo).toBe(expected1);
-				dispatcher({ type: "inc"});
+				dispatcher({ type: "inc" });
 				expect(getState().foo).toBe(expected2);
 			};
 			const { result } = renderHook(() => useAction(thunk), {
@@ -103,7 +106,6 @@ describe("createStoreHooks", () => {
 			});
 			result.current();
 			expect(store.getState().foo).toEqual(expected2);
-
 		});
 	});
 
@@ -118,4 +120,4 @@ describe("createStoreHooks", () => {
 			expect(store.getState().foo).toEqual(expected);
 		});
 	});
-})
+});

@@ -1,15 +1,14 @@
-import React, {
-	createContext, useContext
-} from "react";
+import React, { createContext, useContext } from "react";
 import { InquirerReact, Inquirier, Query } from "./types";
 
 export const createInquirierHooks = <Q extends Query>(): InquirerReact<Q> => {
 	const QueryContext = createContext<Inquirier<Q> | null>(null);
-	const useInquirier = () => assertInquirierContextValue(useContext(QueryContext));
+	const useInquirier = () =>
+		assertInquirierContextValue(useContext(QueryContext));
 
 	const hooks: InquirerReact<Q> = {
 		QueryContext,
-		useInquirierEmitter: () =>{ 
+		useInquirierEmitter: () => {
 			const inquirier = useInquirier();
 			return React.useCallback((q) => inquirier.query(q), []);
 		},
@@ -17,11 +16,12 @@ export const createInquirierHooks = <Q extends Query>(): InquirerReact<Q> => {
 			const inquirier = useInquirier();
 			return React.useEffect(() => {
 				return inquirier.register(tag, cb);
-		}, additionalDeps)}
-	}
+			}, additionalDeps);
+		}
+	};
 
 	return hooks;
-}
+};
 
 const assertInquirierContextValue = <S>(value: S | null): S => {
 	if (value === null) {

@@ -67,7 +67,9 @@ export type Logger<S, A extends Action> = {
  * @param cb Callback to run after dispatches
  * @returns Function to deregister the callback
  */
-export type Subscribe<S, A extends Action> = (cb: Subscriber<S, A>) => () => void;
+export type Subscribe<S, A extends Action> = (
+	cb: Subscriber<S, A>
+) => () => void;
 
 /**
  * Add a reducer to be ran on dispatches
@@ -182,7 +184,9 @@ export type UseSelector<S> = <A>(selector: Selector<S, A>) => A;
  * clearFilters();
  * ```
  */
-export type UseAction<S, A extends Action> = (action: A | ActionThunk<S, A>) => () => void;
+export type UseAction<S, A extends Action> = (
+	action: A | ActionThunk<S, A>
+) => () => void;
 
 /**
  * Create a callback which runs the given action creator and dispatches it's action result
@@ -215,20 +219,23 @@ export type StoreReact<S, A extends Action> = {
  * Base shape for Queries
  * @category Query API
  */
-export type Query = {tag: string, result: any};
+export type Query = { tag: string; result: any };
 
 /**
  * @ignore
  */
 export type RegisterQueryResponderArgs<Q extends Query> = Q extends any
-? [Q['tag'], RunQuery<Q>]
-: [never]
+	? [Q["tag"], QueryResponder<Q>]
+	: [never];
 
 /**
  * Register a handler for a specific query
  * @category Query API
  */
-export type RegisterQueryResponder<Q extends Query> = (args: RegisterQueryResponderArgs<Q>[0], args2: RegisterQueryResponderArgs<Q>[1]) => () => void;
+export type RegisterQueryResponder<Q extends Query> = (
+	args: RegisterQueryResponderArgs<Q>[0],
+	args2: RegisterQueryResponderArgs<Q>[1]
+) => () => void;
 
 /**
  * Execute a query with 0+ results
@@ -236,7 +243,12 @@ export type RegisterQueryResponder<Q extends Query> = (args: RegisterQueryRespon
  * @returns results - 0+ results typed to query.result
  * @category Query API
  */
-export type RunQuery<Q extends Query> = (query: Omit<Q, 'result'>) => Array<Q['result']>;
+export type RunQuery<Q extends Query> = (
+	query: Omit<Q, "result">
+) => Array<Q["result"]>;
+export type QueryResponder<Q extends Query> = (
+	query: Omit<Q, "result">
+) => Q["result"];
 
 /**
  * Collection type for querying and responding
@@ -245,7 +257,7 @@ export type RunQuery<Q extends Query> = (query: Omit<Q, 'result'>) => Array<Q['r
 export type Inquirier<Q extends Query> = {
 	register: RegisterQueryResponder<Q>;
 	query: RunQuery<Q>;
-}
+};
 
 /**
  * Inquirer functionality exposed via hooks
@@ -253,6 +265,10 @@ export type Inquirier<Q extends Query> = {
  */
 export type InquirerReact<Q extends Query> = {
 	QueryContext: React.Context<Inquirier<Q> | null>;
-	useInquirierResponder: (tag: RegisterQueryResponderArgs<Q>[0], cb: RegisterQueryResponderArgs<Q>[1], additionalDeps: any[]) => void;
+	useInquirierResponder: (
+		tag: RegisterQueryResponderArgs<Q>[0],
+		cb: RegisterQueryResponderArgs<Q>[1],
+		additionalDeps: any[]
+	) => void;
 	useInquirierEmitter: () => RunQuery<Q>;
-}
+};

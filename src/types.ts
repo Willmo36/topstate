@@ -18,8 +18,8 @@ export type Reducer<S, A extends Action> = (state: S, action: A) => S;
  * @category Inferred
  */
 export type ActionHandlers<S, A extends Action> = A extends any
-	? Partial<Record<A["type"], Reducer<S, A>>>
-	: never;
+    ? Partial<Record<A["type"], Reducer<S, A>>>
+    : never;
 /**
  * Return the current state value
  * @category Store API
@@ -40,7 +40,7 @@ export type Subscriber<S, A extends Action> = (s: S, a: A) => void;
  * @returns void Fire & Forget
  */
 export type Dispatcher<S, A extends Action> = (
-	action: A | ActionThunk<S, A>
+    action: A | ActionThunk<S, A>
 ) => void;
 
 /**
@@ -49,16 +49,16 @@ export type Dispatcher<S, A extends Action> = (
  * Useful for async patterns. See redux-thunk.
  */
 export type ActionThunk<S, A extends Action> = (
-	getState: GetState<S>,
-	dispatcher: Dispatcher<S, A>
+    getState: GetState<S>,
+    dispatcher: Dispatcher<S, A>
 ) => void;
 
 /** @ignore */
 export type Logger<S, A extends Action> = {
-	logStart: (action: A) => void;
-	logAction: (action: A) => void;
-	logState: (state: S, stage: "prev" | "next") => void;
-	logEnd: () => void;
+    logStart: (action: A) => void;
+    logAction: (action: A) => void;
+    logState: (state: S, stage: "prev" | "next") => void;
+    logEnd: () => void;
 };
 
 /**
@@ -68,7 +68,7 @@ export type Logger<S, A extends Action> = {
  * @returns Function to deregister the callback
  */
 export type Subscribe<S, A extends Action> = (
-	cb: Subscriber<S, A>
+    cb: Subscriber<S, A>
 ) => () => void;
 
 /**
@@ -78,7 +78,7 @@ export type Subscribe<S, A extends Action> = (
  * @returns Function to remove the given reducer, no longer running it upon dispatches
  */
 export type AddReducer<S, A extends Action> = (
-	reducer: Reducer<S, A>
+    reducer: Reducer<S, A>
 ) => () => void;
 
 /**
@@ -95,17 +95,17 @@ export type AddReducer<S, A extends Action> = (
  * @returns Function to remove the given reducer
  */
 export type AddSubReducer<S, A extends Action> = <K extends keyof S>(
-	key: K,
-	reducer: Reducer<S[K], A>
+    key: K,
+    reducer: Reducer<S[K], A>
 ) => () => void;
 
 /** @category Primary API */
 export type Store<S, A extends Action> = {
-	getState: GetState<S>;
-	dispatch: Dispatcher<S, A>;
-	subscribe: Subscribe<S, A>;
-	addReducer: AddReducer<S, A>;
-	addSubReducer: AddSubReducer<S, A>;
+    getState: GetState<S>;
+    dispatch: Dispatcher<S, A>;
+    subscribe: Subscribe<S, A>;
+    addReducer: AddReducer<S, A>;
+    addSubReducer: AddSubReducer<S, A>;
 };
 
 /**
@@ -118,15 +118,15 @@ export type Selector<S, A> = (s: S) => A;
  * @ignore
  */
 export type SelectorResult<SL> = SL extends (...args: any) => infer A
-	? A
-	: never;
+    ? A
+    : never;
 
 /**
  * Apply SelectorResult to each member of a collection
  * @ignore
  */
 export type SelectorResults<S> = {
-	[K in keyof S]: SelectorResult<S[K]>;
+    [K in keyof S]: SelectorResult<S[K]>;
 };
 
 /**
@@ -134,7 +134,7 @@ export type SelectorResults<S> = {
  * @ignore
  */
 export type LiftToSelector<S, AS> = {
-	[K in keyof AS]: Selector<S, AS[K]>;
+    [K in keyof AS]: Selector<S, AS[K]>;
 };
 
 /**
@@ -143,7 +143,7 @@ export type LiftToSelector<S, AS> = {
  * whilt applying memoization to it.
  */
 export type Memoize = <Args extends any[], R>(
-	fn: (...args: Args) => R
+    fn: (...args: Args) => R
 ) => (...args: Args) => R;
 
 /**
@@ -185,7 +185,7 @@ export type UseSelector<S> = <A>(selector: Selector<S, A>) => A;
  * ```
  */
 export type UseAction<S, A extends Action> = (
-	action: A | ActionThunk<S, A>
+    action: A | ActionThunk<S, A>
 ) => () => void;
 
 /**
@@ -201,18 +201,18 @@ export type UseAction<S, A extends Action> = (
  * ```
  */
 export type UseActionCreator<A extends Action> = <B = void>(
-	actionCreator: (b: B) => A,
-	additionalDeps?: any[]
+    actionCreator: (b: B) => A,
+    additionalDeps?: any[]
 ) => (b: B) => void;
 
 /** @category Primary API */
 export type StoreReact<S, A extends Action> = {
-	useStore: UseStore<S, A>;
-	useDispatch: UseDispatch<S, A>;
-	useSelector: UseSelector<S>;
-	useAction: UseAction<S, A>;
-	useActionCreator: UseActionCreator<A>;
-	StoreContext: React.Context<Store<S, A> | null>;
+    useStore: UseStore<S, A>;
+    useDispatch: UseDispatch<S, A>;
+    useSelector: UseSelector<S>;
+    useAction: UseAction<S, A>;
+    useActionCreator: UseActionCreator<A>;
+    StoreContext: React.Context<Store<S, A> | null>;
 };
 
 /**
@@ -225,16 +225,16 @@ export type Query = { tag: string; result: any };
  * @ignore
  */
 export type RegisterQueryResponderArgs<Q extends Query> = Q extends any
-	? [Q["tag"], QueryResponder<Q>]
-	: [never];
+    ? [Q["tag"], QueryResponder<Q>]
+    : [never];
 
 /**
  * Register a handler for a specific query
  * @category Query API
  */
 export type RegisterQueryResponder<Q extends Query> = (
-	args: RegisterQueryResponderArgs<Q>[0],
-	args2: RegisterQueryResponderArgs<Q>[1]
+    args: RegisterQueryResponderArgs<Q>[0],
+    args2: RegisterQueryResponderArgs<Q>[1]
 ) => () => void;
 
 /**
@@ -244,10 +244,10 @@ export type RegisterQueryResponder<Q extends Query> = (
  * @category Query API
  */
 export type RunQuery<Q extends Query> = (
-	query: Omit<Q, "result">
+    query: Omit<Q, "result">
 ) => Array<Q["result"]>;
 export type QueryResponder<Q extends Query> = (
-	query: Omit<Q, "result">
+    query: Omit<Q, "result">
 ) => Q["result"];
 
 /**
@@ -255,8 +255,8 @@ export type QueryResponder<Q extends Query> = (
  * @category Query API
  */
 export type Inquirier<Q extends Query> = {
-	register: RegisterQueryResponder<Q>;
-	query: RunQuery<Q>;
+    register: RegisterQueryResponder<Q>;
+    query: RunQuery<Q>;
 };
 
 /**
@@ -264,11 +264,11 @@ export type Inquirier<Q extends Query> = {
  * @category Query API
  */
 export type InquirerReact<Q extends Query> = {
-	QueryContext: React.Context<Inquirier<Q> | null>;
-	useInquirierResponder: (
-		tag: RegisterQueryResponderArgs<Q>[0],
-		cb: RegisterQueryResponderArgs<Q>[1],
-		additionalDeps: any[]
-	) => void;
-	useInquirierEmitter: () => RunQuery<Q>;
+    QueryContext: React.Context<Inquirier<Q> | null>;
+    useInquirierResponder: (
+        tag: RegisterQueryResponderArgs<Q>[0],
+        cb: RegisterQueryResponderArgs<Q>[1],
+        additionalDeps: any[]
+    ) => void;
+    useInquirierEmitter: () => RunQuery<Q>;
 };

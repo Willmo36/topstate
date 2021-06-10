@@ -1,27 +1,27 @@
 import { Selector, LiftToSelector, SelectorResults, Memoize } from "./types";
 
 const arrayShallowEquality = <T>(a1: T[], a2: T[]): boolean =>
-    a1.length === a2.length && a1.every((a1Val, i) => a1Val === a2[i]);
+  a1.length === a2.length && a1.every((a1Val, i) => a1Val === a2[i]);
 
 /**
  * @ignore
  */
 export const memoizeLastResult = <Args extends any[], R>(
-    fn: (...args: Args) => R
+  fn: (...args: Args) => R
 ): ((...args: Args) => R) => {
-    let lastArgs: Args;
-    let lastResult: R;
+  let lastArgs: Args;
+  let lastResult: R;
 
-    const fn2 = (...args: Args): R => {
-        if (!arrayShallowEquality(args, lastArgs ?? [])) {
-            lastResult = fn(...args);
-            lastArgs = args;
-            return lastResult;
-        }
-        return lastResult;
-    };
+  const fn2 = (...args: Args): R => {
+    if (!arrayShallowEquality(args, lastArgs ?? [])) {
+      lastResult = fn(...args);
+      lastArgs = args;
+      return lastResult;
+    }
+    return lastResult;
+  };
 
-    return fn2;
+  return fn2;
 };
 
 /**
@@ -36,8 +36,8 @@ export const memoizeLastResult = <Args extends any[], R>(
  * ```
  */
 export const createSelector = <S, A>(
-    fn: (s: S) => A,
-    memoize: Memoize = memoizeLastResult
+  fn: (s: S) => A,
+  memoize: Memoize = memoizeLastResult
 ): Selector<S, A> => memoize(fn);
 
 // Todo - add type level tests to ensure createCompoundSelector infers correctly
@@ -63,19 +63,19 @@ export const createSelector = <S, A>(
  * ```
  */
 export const createCompoundSelector = <
-    S,
-    B,
-    A1, // LiftToSelector appears to prevent inference from picking up S. So we make the first dependent selector mandatory
-    AN extends any[]
+  S,
+  B,
+  A1, // LiftToSelector appears to prevent inference from picking up S. So we make the first dependent selector mandatory
+  AN extends any[]
 >(
-    selectors: [Selector<S, A1>, ...LiftToSelector<S, AN>],
-    fn: (...selectorResults: SelectorResults<typeof selectors>) => B,
-    memoize: Memoize = memoizeLastResult
+  selectors: [Selector<S, A1>, ...LiftToSelector<S, AN>],
+  fn: (...selectorResults: SelectorResults<typeof selectors>) => B,
+  memoize: Memoize = memoizeLastResult
 ): Selector<S, B> => {
-    const memFn = memoize(fn);
-    return memoize((state) => {
-        const selections = selectors.map((sl) => sl(state));
-        // @ts-ignore
-        return memFn(...selections);
-    });
+  const memFn = memoize(fn);
+  return memoize((state) => {
+    const selections = selectors.map((sl) => sl(state));
+    // @ts-ignore
+    return memFn(...selections);
+  });
 };

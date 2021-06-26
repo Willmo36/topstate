@@ -4,8 +4,8 @@
     "parser": "typescript",
     "printWidth": 80,
     "semi": true,
-    "singleQuote": false,
     "tabWidth": 2,
-    "trailingComma": "none",
-    "useTabs": true
+    "useTabs": false,
+    "singleQuote": false,
+    "trailingComma": "none"
   }

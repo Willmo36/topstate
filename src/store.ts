@@ -1,6 +1,6 @@
 import {
   Action,
-  ActionHandlers,
+  ReducerByAction,
   ActionThunk,
   AddReducer,
   AddSubReducer,
@@ -10,7 +10,8 @@ import {
   Reducer,
   Store,
   Subscribe,
-  Subscriber
+  Subscriber,
+  ReducerByKey
 } from "./types";
 
 /** @ignore */
@@ -71,30 +72,11 @@ export function createStore<S, A extends Action>(
     };
   };
 
-  const addSubReducer: AddSubReducer<S, A> = <K extends keyof S>(
-    key: K,
-    reducer: Reducer<S[K], A>
-  ) => {
-    const lifted: Reducer<S, A> = (state, action) => {
-      const result = reducer(state[key], action);
-      if (result !== state[key]) {
-        return { ...state, [key]: result };
-      }
-      return state;
-    };
-
-    reducers.push(lifted);
-    return () => {
-      reducers = reducers.filter((r) => r !== lifted);
-    };
-  };
-
   return {
     getState,
     dispatch,
     subscribe,
     addReducer,
-    addSubReducer
   };
 }
 
@@ -110,13 +92,39 @@ export function createStore<S, A extends Action>(
  * });
  * ```
  */
-export const reducerFromHandlers = <S, A extends Action>(
-  handlers: ActionHandlers<S, A>
+
+/**
+ * Create a reducer by specifying a nested reducer for given keys
+ * 
+ * @category Primary API
+ * @typeParam S State type
+ * @typeParam A Action type
+ * @example ```
+ * const myReducer = reducerByAction<MyState, MyAction>({
+ * 	key1: (state[key1], action1) => state[key1],
+ * 	key2: (state[key2], action2) => state,
+ * });
+ * ```
+ */
+export const reducerByAction = <S, A extends Action>(
+  handlers: ReducerByAction<S, A>
 ): Reducer<S, A> => (state, action) => {
   const handler: Reducer<S, A> = handlers[action.type] ?? identity;
   return handler(state, action);
 };
 
+export const reducerByKey = <S, A extends Action>(
+  handlers: ReducerByKey<S, A>
+): Reducer<S, A> => {
+  const keys = Object.keys(handlers) as (keyof S)[];
+  return (state, action) => {
+    return keys.reduce((s, k) => {
+      const skReducer = handlers[k]!;
+      const sk = skReducer(s[k], action);
+      return { ...s, [k]: sk };
+    }, state);
+  };
+};
 // helpers
 const noop = () => ({});
 const identity = <A>(a: A) => a;

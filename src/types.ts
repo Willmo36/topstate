@@ -17,9 +17,17 @@ export type Reducer<S, A extends Action> = (state: S, action: A) => S;
  * See {@link reducerFromHandlers} for usage.
  * @category Inferred
  */
-export type ActionHandlers<S, A extends Action> = A extends any
+export type ReducerByAction<S, A extends Action> = A extends any
   ? Partial<Record<A["type"], Reducer<S, A>>>
   : never;
+
+/**
+ * A record keyed by the Keys of the State object
+ * values are a reducer over that sub state object
+ */
+export type ReducerByKey<S, A extends Action> = Partial<{
+  [SK in keyof S]: Reducer<S[SK], A>
+}>;
 /**
  * Return the current state value
  * @category Store API
@@ -105,7 +113,6 @@ export type Store<S, A extends Action> = {
   dispatch: Dispatcher<S, A>;
   subscribe: Subscribe<S, A>;
   addReducer: AddReducer<S, A>;
-  addSubReducer: AddSubReducer<S, A>;
 };
 
 /**

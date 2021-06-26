@@ -3,7 +3,7 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useState,
+  useState
 } from "react";
 import {
   Action,
@@ -14,7 +14,7 @@ import {
   UseActionCreator,
   UseDispatch,
   UseSelector,
-  UseStore,
+  UseStore
 } from "./types";
 
 /**
@@ -78,7 +78,7 @@ export function createStoreHooks<S, A extends Action>(): StoreReact<S, A> {
     useSelector,
     useAction,
     useActionCreator,
-    StoreContext,
+    StoreContext
   };
 }
 

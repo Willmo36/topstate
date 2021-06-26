@@ -17,7 +17,7 @@ describe("store", () => {
 
       const initial: State = { foo: 0 };
       const reducer = reducerFromHandlers<State, Inc>({
-        inc: (s) => ({ foo: s.foo + 1 }),
+        inc: (s) => ({ foo: s.foo + 1 })
       });
 
       const store = createStore<State, Inc>(initial, createNoopLogger());
@@ -36,7 +36,7 @@ describe("store", () => {
 
       const initial: State = { foo: 0 };
       const reducer = reducerFromHandlers<State, Inc>({
-        inc: (s) => ({ foo: s.foo + 1 }),
+        inc: (s) => ({ foo: s.foo + 1 })
       });
 
       const store = createStore<State, Inc>(initial, createNoopLogger());
@@ -61,14 +61,14 @@ describe("store", () => {
 
       const initial: State = { foo: 0 };
       const reducer = reducerFromHandlers<State, Inc>({
-        inc: (s) => ({ foo: s.foo + 1 }),
+        inc: (s) => ({ foo: s.foo + 1 })
       });
 
       const jestLogger: Logger<State, Inc> = {
         logAction: jest.fn(),
         logEnd: jest.fn(),
         logStart: jest.fn(),
-        logState: jest.fn(),
+        logState: jest.fn()
       };
 
       const store = createStore<State, Inc>(initial, jestLogger);
@@ -87,7 +87,7 @@ describe("store", () => {
 
       const initial: State = { foo: 0 };
       const reducer = reducerFromHandlers<State, Inc>({
-        inc: (s) => ({ foo: s.foo + 1 }),
+        inc: (s) => ({ foo: s.foo + 1 })
       });
 
       const store = createStore<State, Inc>(initial, createNoopLogger());
@@ -131,7 +131,7 @@ describe("store", () => {
         const initial: State = { foo: { bar: 0 } };
         const store = createStore<State, Inc>(initial, createNoopLogger());
         const subReducer = jest.fn((foo: State["foo"]) => ({
-          bar: foo.bar + 1,
+          bar: foo.bar + 1
         }));
         const removeSubReducer = store.addSubReducer("foo", subReducer);
 
@@ -158,7 +158,7 @@ describe("store", () => {
         const initial: State = { foo: 0 };
         const incHandler = jest.fn(identity);
         const reducer1: Reducer<State, Inc> = reducerFromHandlers<State, Inc>({
-          inc: incHandler,
+          inc: incHandler
         });
         const reducer2: Reducer<State, Inc> = jest.fn(identity);
 
@@ -183,7 +183,7 @@ describe("store", () => {
 
       const incMock = jest.fn((s: State) => ({ foo: s.foo + 1 }));
       const reducer = reducerFromHandlers<State, Inc>({
-        inc: incMock,
+        inc: incMock
       });
 
       const store = createStore<State, Inc>(initial, createNoopLogger());

@@ -15,7 +15,7 @@ const {
   useSelector,
   useStore,
   useAction,
-  useActionCreator,
+  useActionCreator
 } = createStoreHooks<TestState, TestAction>();
 
 const initialState: TestState = { foo: 0 };
@@ -56,7 +56,7 @@ describe("createStoreHooks", () => {
 
     it("should consume a selector", () => {
       const { result } = renderHook(() => useSelector(fooSelector), {
-        wrapper,
+        wrapper
       });
       expect(result.current).toBe(store.getState().foo);
     });
@@ -65,7 +65,7 @@ describe("createStoreHooks", () => {
       const initialFoo = store.getState().foo;
       const nextFoo = initialFoo + 1;
       const { result } = renderHook(() => useSelector(fooSelector), {
-        wrapper,
+        wrapper
       });
       expect(result.current).toBe(initialFoo);
 
@@ -83,7 +83,7 @@ describe("createStoreHooks", () => {
     it("should provide a callback thunk to dispatch the action", () => {
       const expected = store.getState().foo + 1;
       const { result } = renderHook(() => useAction({ type: "inc" }), {
-        wrapper,
+        wrapper
       });
       result.current();
       expect(store.getState().foo).toEqual(expected);
@@ -102,7 +102,7 @@ describe("createStoreHooks", () => {
         expect(getState().foo).toBe(expected2);
       };
       const { result } = renderHook(() => useAction(thunk), {
-        wrapper,
+        wrapper
       });
       result.current();
       expect(store.getState().foo).toEqual(expected2);

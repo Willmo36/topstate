@@ -17,6 +17,6 @@ export function createQueries<Q extends Query>(): Inquirier<Q> {
 
   return {
     register,
-    query: runQuery,
+    query: runQuery
   };
 }

@@ -1,4 +1,9 @@
-import { createNoopLogger, createStore, reducerFromHandlers } from "../store";
+import {
+  createNoopLogger,
+  createStore,
+  reducerByAction,
+  reducerByKey
+} from "../store";
 import { ActionThunk, Logger, Reducer } from "../types";
 const identity = <A>(a: A) => a;
 
@@ -16,7 +21,7 @@ describe("store", () => {
       type State = { foo: number };
 
       const initial: State = { foo: 0 };
-      const reducer = reducerFromHandlers<State, Inc>({
+      const reducer = reducerByAction<State, Inc>({
         inc: (s) => ({ foo: s.foo + 1 })
       });
 
@@ -35,7 +40,7 @@ describe("store", () => {
       type State = { foo: number };
 
       const initial: State = { foo: 0 };
-      const reducer = reducerFromHandlers<State, Inc>({
+      const reducer = reducerByAction<State, Inc>({
         inc: (s) => ({ foo: s.foo + 1 })
       });
 
@@ -60,7 +65,7 @@ describe("store", () => {
       type State = { foo: number };
 
       const initial: State = { foo: 0 };
-      const reducer = reducerFromHandlers<State, Inc>({
+      const reducer = reducerByAction<State, Inc>({
         inc: (s) => ({ foo: s.foo + 1 })
       });
 
@@ -86,7 +91,7 @@ describe("store", () => {
       type State = { foo: number };
 
       const initial: State = { foo: 0 };
-      const reducer = reducerFromHandlers<State, Inc>({
+      const reducer = reducerByAction<State, Inc>({
         inc: (s) => ({ foo: s.foo + 1 })
       });
 
@@ -122,34 +127,6 @@ describe("store", () => {
       expect(sub2).not.toHaveBeenCalled();
     });
 
-    describe("addSubReducer", () => {
-      it("should add a reducer handling the given actions for a given key", () => {
-        type Inc = { type: "inc" };
-        type SubState = { bar: number };
-        type State = { foo: SubState };
-
-        const initial: State = { foo: { bar: 0 } };
-        const store = createStore<State, Inc>(initial, createNoopLogger());
-        const subReducer = jest.fn((foo: State["foo"]) => ({
-          bar: foo.bar + 1
-        }));
-        const removeSubReducer = store.addSubReducer("foo", subReducer);
-
-        store.dispatch({ type: "inc" });
-        expect(store.getState()).toEqual({ foo: { bar: 1 } });
-        expect(subReducer).toHaveBeenCalledTimes(1);
-
-        store.dispatch({ type: "inc" });
-        expect(subReducer).toHaveBeenCalledTimes(2);
-        expect(store.getState()).toEqual({ foo: { bar: 2 } });
-
-        removeSubReducer();
-        store.dispatch({ type: "inc" });
-        expect(subReducer).toHaveBeenCalledTimes(2);
-        expect(store.getState()).toEqual({ foo: { bar: 2 } });
-      });
-    });
-
     describe("mulitple reducers", () => {
       it("should combine 2 reducers, one with handler, one with fallback", () => {
         type Inc = { type: "inc" };
@@ -157,7 +134,7 @@ describe("store", () => {
 
         const initial: State = { foo: 0 };
         const incHandler = jest.fn(identity);
-        const reducer1: Reducer<State, Inc> = reducerFromHandlers<State, Inc>({
+        const reducer1: Reducer<State, Inc> = reducerByAction<State, Inc>({
           inc: incHandler
         });
         const reducer2: Reducer<State, Inc> = jest.fn(identity);
@@ -174,7 +151,7 @@ describe("store", () => {
     });
   });
 
-  describe("reducerFromHandlers", () => {
+  describe("reducerByAction", () => {
     it("should return a reducer handling the given actions", () => {
       type Inc = { type: "inc" };
       type State = { foo: number };
@@ -182,7 +159,7 @@ describe("store", () => {
       const initial: State = { foo: 0 };
 
       const incMock = jest.fn((s: State) => ({ foo: s.foo + 1 }));
-      const reducer = reducerFromHandlers<State, Inc>({
+      const reducer = reducerByAction<State, Inc>({
         inc: incMock
       });
 
@@ -202,13 +179,45 @@ describe("store", () => {
       type State = { foo: number };
 
       const initial: State = { foo: 0 };
-      const reducer = reducerFromHandlers<State, Inc>({});
+      const reducer = reducerByAction<State, Inc>({});
 
       const store = createStore<State, Inc>(initial, createNoopLogger());
       store.addReducer(reducer);
 
       store.dispatch({ type: "inc" });
       expect(store.getState()).toBe(initial);
+    });
+  });
+
+  describe("reducerByKey", () => {
+    it("should return a reducer which updates only the given key of the state", () => {
+      type Inc = { type: "inc" };
+      type Dec = { type: "dec" };
+      type State = { foo: number; bar: number };
+
+      const initial: State = { foo: 0, bar: 0 };
+
+      const incMock = jest.fn((s: State["foo"]) => s + 1);
+      const reducer = reducerByKey<State, Inc | Dec>({
+        foo: reducerByAction({
+          inc: incMock
+        })
+      });
+
+      const store = createStore<State, Inc | Dec>(initial, createNoopLogger());
+      store.addReducer(reducer);
+
+      store.dispatch({ type: "inc" });
+      expect(store.getState()).toEqual({ foo: 1, bar: 0 });
+      expect(incMock).toHaveBeenCalledTimes(1);
+
+      store.dispatch({ type: "inc" });
+      expect(incMock).toHaveBeenCalledTimes(2);
+      expect(store.getState()).toEqual({ foo: 2, bar: 0 });
+
+      store.dispatch({ type: "dec" });
+      expect(incMock).toHaveBeenCalledTimes(2);
+      expect(store.getState()).toEqual({ foo: 2, bar: 0 });
     });
   });
 });
